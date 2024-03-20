@@ -11,6 +11,7 @@
     "@miraki/eslint-config": "*",
     "@miraki/typescript-config": "*",
     "prettier": "^3.2.5",
+    "prisma": "^5.11.0",
     "turbo": "latest"
   },
   "engines": {
@@ -22,6 +23,8 @@
     "packages/*"
   ],
   "dependencies": {
-    "dotenv-cli": "^7.4.1"
+    "@prisma/client": "^5.11.0",
+    "dotenv-cli": "^7.4.1",
+    "mongoose": "^8.2.2"
   }
 }
