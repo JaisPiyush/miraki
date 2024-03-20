@@ -18,11 +18,15 @@ This Turborepo includes the following packages/apps:
 
 - `docs`: a [Next.js](https://nextjs.org/) app
 - `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `backend` : NestJS backend app
+- `@miraki/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@miraki/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@miraki/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+
+Each package in packages should have name as `@miraki/*` pattern in package.json file, where * will the name. For e.g ui package in packages has name `@miraki/ui` in its package.json file. While apps can have simple names. This is mandatory for avoiding conflict with packages from npm repository with same names.
 
 ### Utilities
 
@@ -79,3 +83,22 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 - [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+
+## Package installation
+This repository is using `npm` as it's package manager.
+
+### Install a package in root directory
+```
+npm install <package>
+```
+
+### Install a package in a workspace
+```
+npm install <package> --workspace=<workspace>
+```
+
+### Remove a package from a workspace
+```
+npm uninstall <package> --workspace=<workspace>
+```
