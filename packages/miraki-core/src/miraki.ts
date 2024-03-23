@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace miraki {
-    export namespace TreeItemDataProvider {
+    export namespace TreeView {
         export enum TreeItemCollapsibleState {
-            None = 0,
-            Collapsed = 1,
-            Expanded = 2
+            Collapsed = 0,
+            Expanded = 1
         }
     
         export interface Command {
@@ -17,23 +16,31 @@ export namespace miraki {
             group?: 'navigation' | 'inline'
             command: Command;
         }
-    
-        export interface TreeItem {
-            collapsibleState?: TreeItemCollapsibleState;
+        
+        export interface TreeItem  {
             command?: Command;
             description?: string;
             icon?: string;
             id: string;
-            label: string;
+            label?: string;
             tooltip?: string;
             name: string;
 
         }
     
-        export interface TreeItemDataProvider extends TreeItem {
-            children: TreeItem[];
-            actions: TreeItemAction[];
-    
+        export interface TreeView extends TreeItem {
+            children: (TreeItem | TreeView)[];
+            collapsibleState?: TreeItemCollapsibleState;
+            addChild(child: TreeItem | TreeView): void;
+            removeChild(index: number): void;
+            setChild(index: number, child: TreeItem | TreeView): void;
+            // dragChild(from: number, to: number): void;
+            action?: {
+                'view/title': TreeItemAction[],
+                'view/item/context': TreeItemAction[],
+            };
+            setCollapsibleState(state: TreeItemCollapsibleState): void;
+
         }
 
     }
