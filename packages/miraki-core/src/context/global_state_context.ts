@@ -2,17 +2,17 @@ import { createContext, useContext } from "react";
 import { action, makeAutoObservable, observable } from "mobx";
 
 export class MirakiGlobalState {
-    activeTreeItemId?: string;
+    activeTreeLeafId?: string;
 
     constructor() {
         makeAutoObservable(this, {
-            activeTreeItemId: observable,
-            setActiveTreeItemId: action,
+            activeTreeLeafId: observable,
+            setActiveTreeLeafId: action,
         });
     }
 
-    setActiveTreeItemId(id?: string) {
-        this.activeTreeItemId = id;
+    setActiveTreeLeafId(id?: string) {
+        this.activeTreeLeafId = id;
     }
 }
 

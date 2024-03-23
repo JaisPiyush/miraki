@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import { miraki } from "@/miraki";
 
 import { observer } from "mobx-react-lite"
-import { TreeItem, TreeView  } from "@/lib/tree_view";
+import { TreeItem, TreeView  } from "@/lib/meraki_tree_view";
 import {  useMirakiGlobalState } from "@/context/global_state_context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { cn } from "@/lib/utils";
@@ -74,7 +74,7 @@ export const TreeViewComponent: React.FC<TreeViewProps> = observer((props: TreeV
     const isOpen = tree.collapsibleState === miraki.TreeView.TreeItemCollapsibleState.Expanded
 
     const setIsOpen = (open: boolean) => {
-      tree.collapsibleState = open ? miraki.TreeView.TreeItemCollapsibleState.Expanded : miraki.TreeView.TreeItemCollapsibleState.Collapsed;
+      tree.setCollapsibleState(open ? miraki.TreeView.TreeItemCollapsibleState.Expanded : miraki.TreeView.TreeItemCollapsibleState.Collapsed)
     }
     
     return (

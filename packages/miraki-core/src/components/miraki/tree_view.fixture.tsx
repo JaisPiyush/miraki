@@ -1,19 +1,19 @@
-import { TreeView } from "@/lib/tree_view";
-import { TreeViewComponent } from "./tree_view";
+import { TreeNode } from "@/lib/meraki_tree_view";
+import { TreeNodeComponent } from "./tree_view";
 import { miraki } from "@/miraki";
 
 export default {
-    'Primary': <TreeViewComponent tree={new TreeView({
+    'Primary': <TreeNodeComponent tree={new TreeNode({
        
             name: 'Trello',
             id: 'Trello',
             tooltip: 'Trello board',
-            collapsibleState: miraki.TreeView.TreeItemCollapsibleState.Collapsed,
+            collapsibleState: miraki.TreeNode.TreeLeafCollapsibleState.Collapsed,
             children: [
                 {
                     id: 'Trello-1',
                     name: 'Boar-1',
-                    collapsibleState: miraki.TreeView.TreeItemCollapsibleState.Collapsed,
+                    collapsibleState: miraki.TreeNode.TreeLeafCollapsibleState.Collapsed,
                     tooltip: 'Trello board',
                     children: [
                         {
@@ -23,7 +23,20 @@ export default {
                         }
                     ]
                 }
-            ]
+            ],
+            action: {
+                title: [
+                    {
+                        id: 'edit',
+                        title: 'Edit',
+                        command: {
+                            command: 'TreeNode.addEntry'
+                        },
+                        group: 'inline',
+                        icon: 'https://firebasestorage.googleapis.com/v0/b/miraki-aa05f.appspot.com/o/public%2Fpencil-1.svg?alt=media&token=498bb45c-2576-4cb6-8fea-b0b91ce0bd8a'
+                    }
+                ]
+            }
         
     })} />,
 }
