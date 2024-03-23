@@ -13,6 +13,15 @@ export default {
                 {
                     id: 'Trello-1',
                     name: 'Boar-1',
+                    collapsibleState: miraki.TreeView.TreeItemCollapsibleState.Collapsed,
+                    tooltip: 'Trello board',
+                    children: [
+                        {
+                            id: 'Creat',
+                            name: 'Create',
+                            tooltip: 'Create a new board',
+                        }
+                    ]
                 }
             ]
         

@@ -2,13 +2,35 @@ import { miraki } from "@/miraki";
 import { action, computed, makeObservable, observable } from "mobx";
 
 interface TreeViewOptions extends miraki.TreeView.TreeItem {
-    children?: miraki.TreeView.TreeItem[];
+    children?: miraki.TreeView.TreeView['children'];
     collapsibleState?: miraki.TreeView.TreeItemCollapsibleState;
     action?: miraki.TreeView.TreeView['action'];
 
 }
 
-class _TreeView implements miraki.TreeView.TreeView {
+
+
+
+export class TreeItemAction implements miraki.TreeView.TreeItemAction {
+    command: miraki.TreeView.Command;
+    title: string;
+    actions: miraki.TreeView.TreeItemAction[];
+    group?: 'navigation' | 'inline';
+    icon?: string | undefined;
+    id: string;
+
+
+    constructor(options: miraki.TreeView.TreeItemAction) {
+        this.command = options.command;
+        this.title = options.title;
+        this.actions = options.actions;
+        this.group = options.group;
+        this.icon = options.icon;
+        this.id = options.id;
+    }
+}
+
+export class BaseTreeView implements miraki.TreeView.TreeView {
     collapsibleState?: miraki.TreeView.TreeItemCollapsibleState;
     _children: miraki.TreeView.TreeView['children'];
     command?: miraki.TreeView.Command;
@@ -57,16 +79,27 @@ class _TreeView implements miraki.TreeView.TreeView {
     }
 }
 
-export class TreeItem extends _TreeView {
+export class TreeItem extends BaseTreeView {
     constructor(options: miraki.TreeView.TreeItem) {
         super(options);
     }
 }
 
-export class TreeView extends _TreeView {
+export class TreeView extends BaseTreeView {
+
+    showInputBox = false;
+
     constructor(options: TreeViewOptions) {
         super(options);
         this._children = this.__castChildren(options.children || []);
+        if (this.action) {
+            if (this.action['view/title']) {
+                this.action['view/title'] = this.__castActions(this.action['view/title']);
+            }
+            if (this.action['view/item/context']) {
+                this.action['view/item/context'] = this.__castActions(this.action['view/item/context']);
+            }
+        }
         makeObservable(this,{
             addChild: action,
             collapsibleState: observable,
@@ -74,12 +107,22 @@ export class TreeView extends _TreeView {
             removeChild: action,
             setChild: action,
             children: computed,
+            showInputBox: observable,
         });
+    }
+
+    __castActions(actions: miraki.TreeView.TreeItemAction[]): TreeItemAction[] {
+        return actions.map(action => {
+            if (action instanceof TreeItemAction) {
+                return action;
+            }
+            return new TreeItemAction(action);
+        })
     }
 
     __castChildren(children: miraki.TreeView.TreeView['children']): (TreeView | TreeItem)[] {
         return children.map(child => {
-            if (child instanceof _TreeView) {
+            if (child instanceof BaseTreeView) {
                 return child;
             }
             if ((child as miraki.TreeView.TreeView).children !== undefined) {
@@ -93,5 +136,21 @@ export class TreeView extends _TreeView {
         const [_child] = this.__castChildren([child]);
         this._children.push(_child);
     }
+
+    get children(): (TreeView | TreeItem)[] {
+        return this.__castChildren(this._children);
+    }
+
+    getTreeItemById(id: string): TreeItem | TreeView | undefined {
+        if (this.id === id) {
+            return this;
+        }
+        for (const child of this.children) {
+            if (child.id === id) {
+                return child;
+            }
+        }
+    }
+
 
 }

@@ -8,13 +8,15 @@ export namespace miraki {
     
         export interface Command {
             command: string;
-            title: string;
-            arguments?: unknown[];
         }
     
         export interface TreeItemAction {
             group?: 'navigation' | 'inline'
             command: Command;
+            title: string;
+            actions: TreeItemAction[];
+            icon?: string;
+            id: string;
         }
         
         export interface TreeItem  {
