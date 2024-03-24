@@ -13,7 +13,7 @@ export namespace miraki {
         }
     
         export interface TreeNodeAction {
-            group?: 'navigation' | 'inline'
+            group?: 'inline'
             command: Command;
             title: string;
             icon?: string;
@@ -53,8 +53,17 @@ export namespace miraki {
         export interface showInputModalArgs {
             title?: string;
             description?: string;
+            value?: string;
             onSubmit: (value: string) => void;
             onClose?: () => void;
+            inputDecorators?: {
+                type?: string;
+                label?: string;
+                placeholder?: string;
+            },
+            modalDecorators? :{
+                nextButtonName?: string;
+            }
         }
     }
 

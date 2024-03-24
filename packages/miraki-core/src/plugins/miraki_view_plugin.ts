@@ -1,4 +1,4 @@
-import { TreeNode } from '@/lib/meraki_tree_view';
+import { TreeNode } from '@/lib/miraki_tree_view';
 import { miraki } from '@/miraki';
 import { IPlugin, PluginStore } from 'react-pluggable';
 

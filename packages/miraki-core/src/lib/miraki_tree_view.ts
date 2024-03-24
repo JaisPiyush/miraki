@@ -1,7 +1,7 @@
 import { miraki } from "@/miraki";
 import { action, computed, makeObservable, observable } from "mobx";
 
-interface TreeNodeOptions extends miraki.TreeNode.TreeLeaf {
+export interface TreeNodeOptions extends miraki.TreeNode.TreeLeaf {
     children?: miraki.TreeNode.TreeNode['children'];
     collapsibleState?: miraki.TreeNode.TreeLeafCollapsibleState;
     action?: miraki.TreeNode.TreeNode['action'];
@@ -11,12 +11,15 @@ interface TreeNodeOptions extends miraki.TreeNode.TreeLeaf {
 
 
 
+
 export class TreeNodeAction implements miraki.TreeNode.TreeNodeAction {
     command: miraki.TreeNode.Command;
     title: string;
-    group?: 'navigation' | 'inline';
+    group?: miraki.TreeNode.TreeNodeAction['group'];
     icon?: string | undefined;
     id: string;
+
+    baseTreeNode?: BaseTreeNode;
 
 
     constructor(options: miraki.TreeNode.TreeNodeAction) {
@@ -25,6 +28,14 @@ export class TreeNodeAction implements miraki.TreeNode.TreeNodeAction {
         this.group = options.group;
         this.icon = options.icon;
         this.id = options.id;
+    }
+
+    attach(node: BaseTreeNode) {
+        this.baseTreeNode = node;
+    }
+    
+    getParent(): BaseTreeNode | undefined {
+        return this.baseTreeNode;
     }
 }
 
@@ -117,33 +128,43 @@ export class TreeNode extends BaseTreeNode {
             setChild: action,
             children: computed,
             showInputBox: observable,
+            _children: observable
         });
     }
 
     __castActions(actions: miraki.TreeNode.TreeNodeAction[]): TreeNodeAction[] {
         return actions.map(action => {
             if (action instanceof TreeNodeAction) {
+                action.attach(this);
                 return action;
             }
-            return new TreeNodeAction(action);
+            const _action = new TreeNodeAction(action);
+            _action.attach(this);
+            return _action;
         })
     }
 
     __castChildren(children: miraki.TreeNode.TreeNode['children']): (TreeNode | TreeLeaf)[] {
         return children.map(child => {
             if (child instanceof BaseTreeNode) {
+                child.attach(this);
                 return child;
             }
+            child.id = `${this.id}.${child.id}`
+            let tree_node_cls = TreeLeaf;
             if ((child as miraki.TreeNode.TreeNode).children !== undefined) {
-                return new TreeNode(child as TreeNodeOptions);
+                tree_node_cls = TreeNode;
             }
-            return new TreeLeaf(child);
+            const leaf =  new tree_node_cls(child);
+            leaf.attach(this);
+            return leaf;
         })
     }
 
     addChild(child: TreeLeaf | TreeNode): void {
         const [_child] = this.__castChildren([child]);
         this._children.push(_child);
+
     }
 
     get children(): (TreeNode | TreeLeaf)[] {
@@ -161,5 +182,14 @@ export class TreeNode extends BaseTreeNode {
         }
     }
 
+    getFlattenIdsOfChildren(): string[] {
+        return this._children.map((child) => child.id);
+    }
 
+
+
+}
+
+export const getGroupActions = (actions: TreeNodeAction[], group?: miraki.TreeNode.TreeNodeAction['group']): TreeNodeAction[] => {
+    return actions.filter(action => action.group === group);
 }
