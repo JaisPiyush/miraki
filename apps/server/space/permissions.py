@@ -9,4 +9,4 @@ class SpaceMemberWithSpaceFieldPermission(permissions.BasePermission):
         space_id = request.data.get('space')
         if space_id is None:
             raise permissions.exceptions.PermissionDenied('space field is required')
-        
+        # TODo: implement complete permission

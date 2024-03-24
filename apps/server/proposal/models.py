@@ -23,8 +23,8 @@ class Proposal(models.Model):
         null=True
     )
     member_quorum = models.FloatField(default=0.5)
-    vote_selected_option_count = models.JSONField()
-    vote_counts = models.IntegerField(default=0)
+    vote_selected_options_count = models.JSONField()
+    votes_count = models.IntegerField(default=0)
 
 class ProposalVote(models.Model):
     proposal = models.ForeignKey(
