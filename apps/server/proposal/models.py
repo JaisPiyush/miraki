@@ -3,7 +3,6 @@ from django.contrib.postgres import fields as postgres_fields
 from space import models as space_models
 from authentication import models as auth_models
 
-from datetime import datetime, timedelta
 # Create your models here.
 
 
@@ -30,6 +29,17 @@ class Proposal(models.Model):
     vote_selected_options_count = models.JSONField(default=dict)
     votes_count = models.IntegerField(default=0)
 
+
+class ProposalVoteManager(models.Manager):
+    def create(self, **kwargs: space_models.Any) -> 'ProposalVote':
+        vote: 'ProposalVote' = super().create(**kwargs)
+        proposal = vote.proposal
+        proposal.votes_count += 1
+        proposal.vote_selected_options_count[vote.vote_selected_option] += 1
+        proposal.save()
+        return vote
+
+
 class ProposalVote(models.Model):
     proposal = models.ForeignKey(
         Proposal,
@@ -42,6 +52,8 @@ class ProposalVote(models.Model):
     )
 
     vote_selected_option = models.CharField(max_length=255)
+    
+    objects: ProposalVoteManager = ProposalVoteManager()
 
 
 

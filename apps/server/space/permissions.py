@@ -11,7 +11,7 @@ class SpaceMemberWithSpaceFieldPermission(permissions.BasePermission):
     def has_permission(self, request: Request, view):
         space_id = view.get_space_id(request)
         if space_id is None:
-            raise permissions.exceptions.PermissionDenied('space field is required')
+            raise permissions.exceptions.PermissionDenied('space field is required for permissions')
         profile: auth_models.Profile = request.profile
         return models.Space.objects.filter(
                 Q(pk=space_id)

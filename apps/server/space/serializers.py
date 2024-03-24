@@ -18,3 +18,8 @@ class SpaceSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['creator'] = self.context['request'].profile
         return super().create(validated_data)
+
+class RestrictedSpaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Space
+        exclude = ['settings', 'members', 'active_proposals','proposals_count','creator',]
