@@ -1,41 +1,38 @@
 from django.db import models
-from django.contrib.auth import models as auth_models
+from authentication import models as auth_models
 # Create your models here.
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(
-        auth_models.User,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
-    avatar = models.URLField()
 
-class UserPublicKey(models.Model):
-    user = models.ForeignKey(
-        auth_models.User,
-        on_delete=models.CASCADE
-    )
-    profile = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE
-    )
-    public_key = models.CharField()
-    network = models.CharField()
+class SpaceBaseManager(models.Manager):
+    def create_personal_space(self, profile: auth_models.Profile) -> 'Space':
+        space = self.create(
+            name='personal_space',
+            private = True,
+            creator=profile,
+        )
+        return space
+
 
 
 class Space(models.Model):
     name = models.CharField(max_length=32)
     private = models.BooleanField(default=True)
-    about = models.TextField()
-    avatar = models.URLField()
-    members = models.ManyToManyField(Profile)
+    about = models.TextField(blank=True, null=True)
+    avatar = models.URLField(null=True)
+    members = models.ManyToManyField(auth_models.Profile, related_name='space_members')
     memberCounts = models.IntegerField(default=0)
     activeProposals = models.IntegerField(default=0)
     proposalCounts = models.IntegerField(default=0)
     creator = models.ForeignKey(
-        Profile,
-        on_delete=models.SET_NULL
+        auth_models.Profile,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='space_creator'
     )
+
+    objects: SpaceBaseManager = SpaceBaseManager()
+
+
 
 
