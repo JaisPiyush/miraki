@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'space.apps.SpaceConfig',
-    'proposal.apps.ProposalConfig'
+    'proposal.apps.ProposalConfig',
+    'rest_framework.authtoken',
+    'authentication.apps.AuthenticationConfig'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'server.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
+}
 
 TEMPLATES = [
     {
