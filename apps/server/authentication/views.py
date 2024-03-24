@@ -9,6 +9,9 @@ from rest_framework.authtoken import models as token_models
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 from rest_framework import permissions as rf_permissions
+from rest_framework import viewsets
+from django.contrib.auth import models as rf_auth_models
+from rest_framework.decorators import action
 
 from space import models as space_models
 from django.db import IntegrityError, transaction
@@ -78,9 +81,15 @@ class Web3LoginAPIView(APIView):
             }, status = status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileAPIView(APIView):
-   
-    def get(self, request: Request, **kwargs):
+
+class ProfileViewSet(viewsets.ModelViewSet):
+
+    serializer_class = serializers.ProfileSerializer
+
+    def get_queryset(self):
+        return models.Profile.objects.prefetch_related('user').filter(pk=self.request.profile.pk)
+    
+    def list(self, request, *args, **kwargs):
         profile: models.Profile = request.profile
         user_public_keys = models.UserPublicKey.objects.filter(profile=profile)
         serializer = serializers.CompleteProfileFetchSerialize(
@@ -94,12 +103,33 @@ class ProfileAPIView(APIView):
             status=status.HTTP_200_OK
         )
     
-    def delete(self, request: Request):
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    
+
+    
+    def destroy(self, request, *args, **kwargs):
         profile: models.Profile = request.profile
         tokens: QuerySet = token_models.Token.objects.filter(user=profile.user)
         tokens.delete()
         profile.user.delete()
         return Response({}, status=status.HTTP_205_RESET_CONTENT)
+    
+    @action(detail=True, methods=['PATCH'])
+    def edit_name(self, request: Request, pk=None):
+        user: rf_auth_models.User = request.user
+        serializer = serializers.UserSerializer(user, data=request.data, partial=True)
+        if not serializer.is_valid():
+            return Response({'detail': serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
+        
 
     
 class UserPublicKeyAPIView(APIView):
@@ -123,3 +153,4 @@ class UserPublicKeyAPIView(APIView):
             serializer.data,
             status=status.HTTP_201_CREATED
         )
+

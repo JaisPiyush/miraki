@@ -9,7 +9,13 @@ router.register(
     basename='profile-space'
 )
 
+router.register(
+    r'',
+    views.SpaceViewSet,
+    basename='space'
+)
+
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]
