@@ -3,8 +3,20 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import {encode} from 'base58-universal'
+
 function App() {
   const [count, setCount] = useState(0)
+
+  const handleClick = async () => {
+    const provider = (window as any).phantom?.solana;
+    const message = 'Hello'
+    const encoded = new TextEncoder().encode(message)
+    const signedMessage = await provider.signMessage(encoded, 'utf8')
+    const bs58Encoded = encode(signedMessage.signature)
+    console.log(signedMessage, bs58Encoded)
+    
+  }
 
   return (
     <>
@@ -18,7 +30,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => {handleClick()}}>
           count is {count}
         </button>
         <p>
