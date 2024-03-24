@@ -29,7 +29,7 @@ class SpaceReadOnlyViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-class CreateSpaceAPIView(generics.CreateAPIView):
+class CreateSpaceProposalAPIView(generics.CreateAPIView):
     queryset = models.Proposal.objects.all()
     serializer_class = serializers.ProposalSerializer
 
