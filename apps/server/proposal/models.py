@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.postgres import fields as postgres_fields
 from space import models as space_models
 from authentication import models as auth_models
+
+from datetime import datetime, timedelta
 # Create your models here.
 
 
@@ -12,18 +14,20 @@ class Proposal(models.Model):
         on_delete=models.CASCADE
     )
     title = models.TextField()
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     options = postgres_fields.ArrayField(models.CharField())
     strategy_details = models.JSONField()
-    start_timestamp = models.DateTimeField(auto_now=True)
-    end_timestamp = models.DateTimeField()
+    start_timestamp = models.DateTimeField(auto_now_add=True)
+    end_timestamp = models.DateTimeField(
+        
+    )
     creator = models.ForeignKey(
         auth_models.Profile,
         on_delete=models.SET_NULL,
         null=True
     )
     member_quorum = models.FloatField(default=0.5)
-    vote_selected_options_count = models.JSONField()
+    vote_selected_options_count = models.JSONField(default=dict)
     votes_count = models.IntegerField(default=0)
 
 class ProposalVote(models.Model):

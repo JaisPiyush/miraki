@@ -87,7 +87,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfileSerializer
 
     def get_queryset(self):
-        return models.Profile.objects.prefetch_related('user').filter(pk=self.request.profile.pk)
+        return models.Profile.objects.filter(pk=self.request.profile.pk)
     
     def list(self, request, *args, **kwargs):
         profile: models.Profile = request.profile
