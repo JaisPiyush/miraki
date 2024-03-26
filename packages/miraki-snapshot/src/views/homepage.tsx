@@ -31,6 +31,7 @@ const JoinSpace = () => {
 
     return (
         <>
+        <div style={{paddingLeft: '10%', paddingRight: '10%', paddingBottom: '150px'}}>
             <HeaderContainer>
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     Join a space
@@ -50,6 +51,7 @@ const JoinSpace = () => {
                     ))}  
                     </CardContainer>
                 )}
+        </div>
         </>
     );
 };
