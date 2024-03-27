@@ -3,15 +3,15 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import { Proposal } from "@/components/proposal";
 import { Input } from "@/components/ui/input";
-import { useState } from 'react';
+import { useState } from "react";
 import { ModeToggle } from "@/components/ mood-toggle";
 
 interface Proposal {
-    title: string;
-    description: string;
-    options: string[];
-  }
-  
+  title: string;
+  description: string;
+  options: string[];
+}
+
 export function SpaceView() {
   const proposals = [
     {
@@ -30,17 +30,17 @@ export function SpaceView() {
       title: "Proposal Title 3",
       description:
         "Description of the space for proposal 3. It willDescription of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1 have a whole paragraph describing the space for proposal 3.",
-      options: ["alice", "bob", "charlie",  "charlie"],
+      options: ["alice", "bob", "charlie", "charlie"],
     },
     {
-        title: "Proposal Title 4",
-        description:
-          "Description of the space for proposal 3. It wiDescription of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1ll have a whole paragraph describing the space for proposal 3.",
-        options: ["alice", "bob", "charlie"],
-      },
+      title: "Proposal Title 4",
+      description:
+        "Description of the space for proposal 3. It wiDescription of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1Description of the space for proposal 1. It will have a whole paragraph describing the space for proposal 1ll have a whole paragraph describing the space for proposal 3.",
+      options: ["alice", "bob", "charlie"],
+    },
   ];
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredProposals, setFilteredProposals] = useState<Proposal[]>([]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ export function SpaceView() {
   };
   return (
     <>
-      <div className="flex min-h-screen w-full flex-col" >
+      <div className="flex min-h-screen w-full flex-col">
         <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
           <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
             <nav className="grid gap-4 text-sm ">
@@ -88,6 +88,10 @@ export function SpaceView() {
                   240k members
                 </p>
               </div>
+
+              <Button style={{ width: "70%", marginTop: "30px" }}>Join</Button>
+            </nav>
+            <div className="grid gap-6">
               <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
                 About
               </h3>
@@ -100,19 +104,25 @@ export function SpaceView() {
                 a whole paragraph of details escription of the space it will
                 have a whole paragraph of details
               </small>
-              <Button style={{ width: "70%", marginTop: "30px" }}>Join</Button>
-            </nav>
-            <div className="grid gap-6">
-            <h1 className="text-3xl font-semibold">Proposals</h1>
-            <Input type="input" placeholder="Search a proposal" style={{width: '30%', minWidth: '200px'}} onChange={handleSearchChange}/>
-              {(searchQuery ? filteredProposals : proposals).map((proposal, index) => (
-                <Proposal
-                  key={index}
-                  title={proposal.title}
-                  description={proposal.description}
-                  options={proposal.options}
-                />
-              ))}
+              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                Proposals
+              </h3>{" "}
+              <Input
+                type="input"
+                placeholder="Search a proposal"
+                style={{ width: "30%", minWidth: "200px" }}
+                onChange={handleSearchChange}
+              />
+              {(searchQuery ? filteredProposals : proposals).map(
+                (proposal, index) => (
+                  <Proposal
+                    key={index}
+                    title={proposal.title}
+                    description={proposal.description}
+                    options={proposal.options}
+                  />
+                )
+              )}
             </div>
           </div>
         </main>
