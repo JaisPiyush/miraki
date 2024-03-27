@@ -89,13 +89,13 @@ export function SpaceView() {
                 </p>
               </div>
 
-              <Button style={{ width: "70%", marginTop: "30px" }}>Join</Button>
+              <Button style={{ width: "70%", marginTop: "10px" }}>Join</Button>
             </nav>
             <div className="grid gap-6">
               <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
                 About
               </h3>
-              <small className="text-sm font-medium leading-none text-muted-foreground">
+              <small className="text-sm font-medium leading-none text-muted-foreground" style={{marginBottom: '20px'}}>
                 Description of the space it will have a whole paragraph of
                 details. escription of the space it will have a whole paragraph
                 of details escription of the space it will have a whole

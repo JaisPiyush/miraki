@@ -10,7 +10,7 @@ import { ModeToggle } from './components/ mood-toggle';
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/join-a-space",
+      path: "/spaces",
       element:  <JoinSpace />,
     },
     {

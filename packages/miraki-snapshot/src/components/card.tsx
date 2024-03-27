@@ -20,8 +20,9 @@ import {
     title: string;
     members: string;
     avatarUrl?: string;
+    isMyspace?: boolean
   }
-export function CardDemo({ className, title, members, avatarUrl,  ...props }: CardDemoProps) {
+export function CardDemo({ className, title, members, avatarUrl, isMyspace,  ...props }: CardDemoProps) {
   return (
     <Card className={cn("w-[100%]", className)} {...props} style={{paddingBottom: '10px', paddingTop: '10px'}}>
       <CardHeader style={{alignItems: 'center'}}>
@@ -33,9 +34,9 @@ export function CardDemo({ className, title, members, avatarUrl,  ...props }: Ca
       </CardHeader>
   
       <CardFooter style={{justifyContent: 'center'}}>
-        <Button className="w-[70%]">
+        {!isMyspace && <Button className="w-[70%]">
            Join
-        </Button>
+        </Button>}
       </CardFooter>
     </Card>
   )
