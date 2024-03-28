@@ -8,16 +8,20 @@ import { Toaster } from "@/components/ui/toaster"
 
 import './App.css'
 import { ProfileState, ProfileStateContext } from './states/profile.state';
+import { ProfileSpaceState, ProfileSpaceStateContext } from './states/profile_space.state';
 
 
 function App() {
 
   const profileState = new ProfileState();
+  const profileSpaceState = new ProfileSpaceState();
 
   return (
     <div className='w-screen h-screen bg-zinc-200'>
       <ProfileStateContext.Provider value={profileState}>
-        <RouterProvider router={browserRouter} />
+        <ProfileSpaceStateContext.Provider value={profileSpaceState}>
+          <RouterProvider router={browserRouter} />
+        </ProfileSpaceStateContext.Provider>
       </ProfileStateContext.Provider>
       <Toaster />
     </div>

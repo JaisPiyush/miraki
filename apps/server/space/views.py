@@ -58,7 +58,7 @@ class SpaceViewSet(viewsets.ModelViewSet):
 
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
-    queryset = models.Space.objects.all()
+    queryset = models.Space.objects.prefetch_related('creator').all()
     serializer_class = serializers.SpaceSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']

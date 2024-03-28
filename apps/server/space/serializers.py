@@ -22,4 +22,4 @@ class SpaceSerializer(serializers.ModelSerializer):
 class RestrictedSpaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Space
-        exclude = ['settings', 'members', 'active_proposals','proposals_count','creator',]
+        exclude = ['settings', 'members']
