@@ -1,46 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-import {encode} from 'base58-universal'
+import { Web3ReactProvider, Web3ReactHooks } from '@web3-react/core'
+import { Connector } from '@web3-react/types'
+
+import { browserRouter } from './router'
+import {RouterProvider} from "react-router-dom";
+
+import { Toaster } from "@/components/ui/toaster"
+
+
+
+import allConnections from './lib/connectors'
+
+const connections: [Connector, Web3ReactHooks][] = allConnections.map(([connector, hooks]) => [connector, hooks])
+
+
+import './App.css'
+import { WalletConnectorContext } from './context/wallet_context';
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  const handleClick = async () => {
-    const provider = (window as any).phantom?.solana;
-    const message = 'Hello'
-    const encoded = new TextEncoder().encode(message)
-    const signedMessage = await provider.signMessage(encoded, 'utf8')
-    const bs58Encoded = encode(signedMessage.signature)
-    console.log(signedMessage, bs58Encoded)
-    
-  }
+  const [isConnected, setIsConnected] = useState(false);
+  const [address, setAddress] = useState<string | undefined>(undefined);
+  const [provider, setProvider] = useState<any | undefined>(undefined)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => {handleClick()}}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='w-screen h-screen bg-zinc-200'>
+      <Web3ReactProvider connectors={connections}>
+        <WalletConnectorContext.Provider value={{
+          isConnected: isConnected,
+          address: address,
+          provider: provider,
+          setIsConnected,
+          setAddress,
+          setProvider  
+        }}>
+          <RouterProvider router={browserRouter} />
+        </WalletConnectorContext.Provider>
+        
+        <Toaster />
+    </Web3ReactProvider>
+    </div>
   )
 }
 

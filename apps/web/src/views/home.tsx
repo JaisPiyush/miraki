@@ -1,0 +1,7 @@
+import NavigationHeader from "@/components/navigation_header";
+
+export default function HomeView() {
+    return (<div className="w-full h-full">
+        <NavigationHeader />
+    </div>)
+}
