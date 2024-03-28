@@ -10,13 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@web3-react/core": "^8.2.3",
+    "@web3-react/types": "^8.2.3",
     "base58-universal": "^2.0.0",
+    "eventemitter3": "^5.0.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "web3-react-phantom": "^1.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
