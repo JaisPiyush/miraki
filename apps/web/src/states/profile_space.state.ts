@@ -1,4 +1,4 @@
-import { fetchProfileSpaces, getSpaceIdFromStorage, storeSpaceInStorage } from "@/lib/api/space";
+import { fetchProfileSpaces, getSpaceIdFromStorage, joinSpace, storeSpaceInStorage } from "@/lib/api/space";
 import { Space } from "@/lib/api/types";
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
@@ -41,6 +41,19 @@ export class ProfileSpaceState {
         } else {
             this.showSpaceSelectionModal = true;
         }
+    }
+
+    get getProfileSpaceIdMap(): Record<number, Space> {
+        const spaceMap = {} as Record<number, Space>;
+        for (const space of this.profileSpaces) {
+            spaceMap[space.id] = space;
+        }
+        return spaceMap;
+    }
+
+    async joinSpace(spaceId: number) {
+        const space = await joinSpace(spaceId);
+        this.profileSpaces.push({...space});
     }
 }
 

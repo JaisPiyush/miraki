@@ -12,7 +12,17 @@ export const storeSpaceInStorage = (spaceId: number) => {
 }
 
 export const fetchProfileSpaces = async () => {
-    const res = await api.get<Space[]>('/space/profile');
+    const res = await api.get<Space[]>('space/profile/');
     console.log(res.data);
+    return res.data;
+}
+
+export const joinSpace = async (spaceId: number) => {
+    const res = await api.put<Space>(`space/profile/${spaceId}/join/`);
+    return res.data;
+}
+
+export const fetchAllSpaces = async () => {
+    const res = await api.get<Space[]>('space/');
     return res.data;
 }
