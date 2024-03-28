@@ -4,7 +4,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Proposal } from "@/components/proposal";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { ModeToggle } from "@/components/ mood-toggle";
+
 
 interface Proposal {
   title: string;

@@ -1,9 +1,9 @@
 import { IPlugin } from "react-pluggable";
 import { PluginStore } from "react-pluggable";
-import { MirakiSidebarView } from "@/components/miraki/sidebar_view";
-import ComponentUpdatedEvent from "@/events/ComponentUpdatedEvent";
-import { miraki } from "@/miraki";
-import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "@/lib/miraki_tree_view";
+import { MirakiSidebarView } from "../components/miraki/sidebar_view";
+import ComponentUpdatedEvent from "../events/ComponentUpdatedEvent";
+import { miraki } from "../miraki";
+import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "../lib/miraki_tree_view";
 
 
 export class MirakiSidebarViewPlugin implements IPlugin {
@@ -106,9 +106,9 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     deactivate(): void {
         this.pluginStore.removeFunction('MirakiSidebarView.getNodes');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.add');
+        this.pluginStore.removeFunction('MirakiSidebarView.add');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.remove');
+        this.pluginStore.removeFunction('MirakiSidebarView.remove');
 
         this.pluginStore.removeFunction('MirakiSidebarView.getComponent');
 

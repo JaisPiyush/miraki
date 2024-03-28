@@ -5,15 +5,15 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "../../components/ui/collapsible"
 import { Button } from "../ui/button";
-import { miraki } from "@/miraki";
+import { miraki } from "../../miraki";
 
 import { observer } from "mobx-react-lite"
-import { getGroupActions, TreeLeaf, TreeNode, TreeNodeAction  } from "@/lib/miraki_tree_view";
-import {  useMirakiGlobalState } from "@/context/global_state_context";
+import { getGroupActions, TreeLeaf, TreeNode, TreeNodeAction  } from "../../lib/miraki_tree_view";
+import {  useMirakiGlobalState } from "../../context/global_state_context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { ToolTipTextBox } from "./tooltip_box";
 import { TreeNodeInlineActionComponent } from "./tree_item_action";
 

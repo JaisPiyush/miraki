@@ -3,8 +3,8 @@ import { PluginStore } from "react-pluggable";
 import { MirakiPeripheralsComponent } from "../components/miraki/miraki_peripherals";
 import React from "react";
 import { miraki } from "@/miraki";
-import { MirakiSingleInputDialog } from "@/components/miraki/input_dialog";
-import ComponentUpdatedEvent from "@/events/ComponentUpdatedEvent";
+import { MirakiSingleInputDialog } from "../components/miraki/input_dialog";
+import ComponentUpdatedEvent from "../events/ComponentUpdatedEvent";
 
 export class MirakiPeripheralsPlugin implements IPlugin {
     public pluginStore: PluginStore = new PluginStore();

@@ -1,4 +1,4 @@
-i
+
 import { IPlugin } from "react-pluggable";
 import { PluginStore } from "react-pluggable";
 

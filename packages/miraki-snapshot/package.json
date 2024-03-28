@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "src/index",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -28,7 +29,8 @@
     "react-dom": "^18.2.0",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.2.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "@miraki/miraki-core": "*"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

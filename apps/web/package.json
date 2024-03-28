@@ -34,7 +34,10 @@
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "web3-react-phantom": "^1.0.4"
+    "web3-react-phantom": "^1.0.4",
+    "@miraki/miraki-core": "*",
+    "@miraki/miraki-snapshot": "*",
+    "react-pluggable": "^0.4.3"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

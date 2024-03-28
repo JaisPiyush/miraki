@@ -1,5 +1,5 @@
-import { TreeNodeAction } from "@/lib/miraki_tree_view";
-import { Button } from "@/components/ui/button";
+import { TreeNodeAction } from "../../lib/miraki_tree_view";
+import { Button } from "../../components/ui/button";
 import { usePluginStore } from "react-pluggable";
 
 interface TreeNodeInlineActionProps {
