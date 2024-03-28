@@ -3,6 +3,7 @@ import {
 } from "react-router-dom"
 import LoginView from "@/views/login_view.tsx";
 import HomeView from "@/views/home";
+import SpaceView from "@/views/space_view";
 
 const browserRouter = createBrowserRouter([
     {
@@ -12,6 +13,10 @@ const browserRouter = createBrowserRouter([
     {
         path: '/',
         element: <HomeView />
+    },
+    {
+        path: '/spaces',
+        element: <SpaceView />
     }
 ]);
 

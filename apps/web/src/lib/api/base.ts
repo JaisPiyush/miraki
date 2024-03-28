@@ -7,6 +7,10 @@ const getAuthenticationToken = () => {
     return `Token ${token}`
 }
 
+export const hasAuthenticationToken = () => {
+    return getAuthenticationToken() !== undefined;
+}
+
 export const api = axios.create({
     baseURL: 'http://localhost:8000/api/',
     headers: {

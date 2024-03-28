@@ -1,11 +1,17 @@
 
 import { api } from "./base"
+import { Profile, UserPublicKey } from "./types"
 
 
 interface LoginResponse {
     public_key: string,
     network: string,
     token: string
+}
+
+export interface ProfileResponse {
+    profile: Profile;
+    user_public_keys: UserPublicKey[];
 }
 
 export const login = async (
@@ -29,3 +35,10 @@ export const login = async (
             window.localStorage.setItem('auth_token', res.data.token);
         }
 }
+
+
+export const fetchProfile = async () => {
+    const res = await api.get<ProfileResponse>('auth/')
+    return res.data;
+}
+
