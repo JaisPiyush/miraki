@@ -33,7 +33,7 @@ export default function SpaceView() {
     return (
         <div className="w-full h-full">
             <NavigationHeader />
-            <div className="w-full h-[90%] bg-white flex justify-center pt-10">
+            <div className="w-full h-[90%] bg-background flex justify-center pt-10">
                 <div className="w-[45%] h-auto grid grid-cols-4 gap-4">
                     {
                         showLoading

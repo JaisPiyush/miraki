@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "./ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "./ui/card"
 
 import { Checkbox } from "./ui/checkbox"
 import {
@@ -13,7 +13,7 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-  } from "@/components/ui/accordion"
+  } from "./ui/accordion"
 
 interface CardData {
     title: string;

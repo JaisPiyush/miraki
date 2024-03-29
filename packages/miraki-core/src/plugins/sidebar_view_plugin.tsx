@@ -35,7 +35,7 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     removeFromNodes(
         node: miraki.TreeNode.TreeNode
     ) {
-        this.nodes = this.nodes.filter((n) => n !== node);
+        this.nodes = this.nodes.filter((n) => n.id !== node.id);
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
     }
 
@@ -74,11 +74,10 @@ export class MirakiSidebarViewPlugin implements IPlugin {
 
     activate(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
 
         this.pluginStore.addFunction(
             'MirakiSidebarView.getNodes', () => {
-            return self.nodes;
+                return this.nodes;
         });
 
         this.pluginStore.addFunction(

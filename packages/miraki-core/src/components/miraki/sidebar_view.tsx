@@ -28,7 +28,7 @@ export const MirakiSidebarView: React.FC = () => {
     );
 
     return (
-        <ScrollArea className="h-full w-full bg-gray-200 border border-gray-200 border-t-0 border-b-0 border-l-0">
+        <ScrollArea className="h-full w-full bg-background border border-gray-200 border-t-0 border-b-0 border-l-0">
             <div>
             {
                 nodes.map((node: BaseTreeNode) => 
