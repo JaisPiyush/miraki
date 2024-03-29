@@ -10,7 +10,7 @@ export class MirakiViewPlugin implements IPlugin {
 
     name = "MirakiViewPlugin@1.0.0";
     public pluginStore: PluginStore  = new PluginStore();
-    private view?: React.ReactNode
+    private view?: React.ComponentClass
 
 
     getPluginName() {
@@ -26,14 +26,14 @@ export class MirakiViewPlugin implements IPlugin {
     }
 
 
-    setView(view: React.ReactNode) {
+    setView(view: React.ComponentClass) {
         this.view = view;
-        this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('Miraki.componentUpdated', "view_container"));
+        this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiView.componentUpdated', "view_container"));
     }
 
     removeView() {
         this.view = undefined;
-        this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('Miraki.componentUpdated', "view_container"));
+        this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiView.componentUpdated', "view_container"));
     }
 
     getComponent() {

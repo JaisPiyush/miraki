@@ -52,9 +52,9 @@ export default class MirakiSnapshotPlugin implements IPlugin {
             () => {
                 this.pluginStore.executeFunction(
                     'MirakiVew.set',
-                    () => {
+                    () => (
                         <SpaceView />
-                    }
+                    )
                 )
             }
         );

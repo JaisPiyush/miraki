@@ -22,16 +22,18 @@ export const MirakiView: React.FC = () => {
         }
     }, [pluginStore, forceUpdate]);
 
-    const View: React.ReactNode = pluginStore.executeFunction(
+    const View: React.ComponentClass | undefined = pluginStore.executeFunction(
         'MirakiView.getView',
     );
 
     return (
         <ScrollArea className="h-full w-full">
             <div>
-            {
-                View
-            }
+                {
+                    View !== undefined
+                    ? <View />
+                    : <></>
+                }
             </div>
         </ScrollArea>
     )
