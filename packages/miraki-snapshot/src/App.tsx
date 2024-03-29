@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { SpaceView } from './views/spaceMain';
 import { ModeToggle } from './components/ mood-toggle';
+import CreateProposalView from './views/create_proposal';
 function App() {
   const router = createBrowserRouter([
     {
@@ -16,6 +17,10 @@ function App() {
     {
       path: "/:spaceName",
       element:  <SpaceView/>,
+    },
+    {
+      path: "/create-proposal",
+      element:  <CreateProposalView/>,
     },
   ]);
   return (
