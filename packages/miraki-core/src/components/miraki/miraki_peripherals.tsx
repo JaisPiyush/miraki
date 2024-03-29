@@ -1,5 +1,5 @@
-import ComponentUpdatedEvent from "@/events/ComponentUpdatedEvent";
-import useForceUpdate from "@/hooks/useForceUpdate";
+import ComponentUpdatedEvent from "../../events/ComponentUpdatedEvent";
+import useForceUpdate from "../../hooks/useForceUpdate";
 import React, { useEffect } from "react";
 import { usePluginStore } from "react-pluggable";
 

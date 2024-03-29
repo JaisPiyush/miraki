@@ -1,12 +1,7 @@
 import { miraki } from "@/miraki";
 import { action, computed, makeObservable, observable } from "mobx";
 
-export interface TreeNodeOptions extends miraki.TreeNode.TreeLeaf {
-    children?: miraki.TreeNode.TreeNode['children'];
-    collapsibleState?: miraki.TreeNode.TreeLeafCollapsibleState;
-    action?: miraki.TreeNode.TreeNode['action'];
-
-}
+export type TreeNodeOptions = miraki.TreeNode.TreeNodeOptions;
 
 
 

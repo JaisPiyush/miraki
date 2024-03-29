@@ -1,9 +1,9 @@
 import { IPlugin } from "react-pluggable";
 import { PluginStore } from "react-pluggable";
-import { MirakiSidebarView } from "@/components/miraki/sidebar_view";
-import ComponentUpdatedEvent from "@/events/ComponentUpdatedEvent";
-import { miraki } from "@/miraki";
-import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "@/lib/miraki_tree_view";
+import { MirakiSidebarView } from "../components/miraki/sidebar_view";
+import ComponentUpdatedEvent from "../events/ComponentUpdatedEvent";
+import { miraki } from "../miraki";
+import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "../lib/miraki_tree_view";
 
 
 export class MirakiSidebarViewPlugin implements IPlugin {
@@ -35,7 +35,7 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     removeFromNodes(
         node: miraki.TreeNode.TreeNode
     ) {
-        this.nodes = this.nodes.filter((n) => n !== node);
+        this.nodes = this.nodes.filter((n) => n.id !== node.id);
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
     }
 
@@ -74,11 +74,10 @@ export class MirakiSidebarViewPlugin implements IPlugin {
 
     activate(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
 
         this.pluginStore.addFunction(
             'MirakiSidebarView.getNodes', () => {
-            return self.nodes;
+                return this.nodes;
         });
 
         this.pluginStore.addFunction(
@@ -106,9 +105,9 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     deactivate(): void {
         this.pluginStore.removeFunction('MirakiSidebarView.getNodes');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.add');
+        this.pluginStore.removeFunction('MirakiSidebarView.add');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.remove');
+        this.pluginStore.removeFunction('MirakiSidebarView.remove');
 
         this.pluginStore.removeFunction('MirakiSidebarView.getComponent');
 

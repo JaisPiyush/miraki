@@ -41,9 +41,10 @@ export default function NavigationHeader() {
     })
 
     return (
-        <div className="w-full h-[10%] bg-white flex py-2 px-6">
+        <div className="w-full h-[10%] bg-background flex py-2 px-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
            <SpaceTile profileSpaceState={profileSpaceState} />
             <div className="ml-12 flex items-center justify-between">
+            <Button variant="ghost"><Link to="/">Dashboard</Link></Button>
                 <Button variant="ghost"><Link to="/spaces">Spaces</Link></Button>
                 <Button variant="ghost"><Link className="ml" to="/apps">Apps</Link></Button>
             </div>
