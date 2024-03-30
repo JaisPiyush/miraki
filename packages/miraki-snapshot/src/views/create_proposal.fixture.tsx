@@ -1,3 +1,5 @@
+import '../index.css'
+
 import CreateProposalView from "./create_proposal";
 
 export default {
