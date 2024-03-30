@@ -1,5 +1,5 @@
 import { api } from "./base"
-import { Space } from "./types"
+import { Space, SpaceSettings } from "./types"
 
 const SELECTED_SPACE_KEY_NAME = 'space_id'
 
@@ -26,3 +26,9 @@ export const fetchAllSpaces = async () => {
     const res = await api.get<Space[]>('space/');
     return res.data;
 }
+
+export const updateSpaceSettings = async (spaceId: number, settings: SpaceSettings) => {
+    const res = await api.patch<Space>(`space/profile/${spaceId}/`, {settings});
+    return res.data;
+}
+

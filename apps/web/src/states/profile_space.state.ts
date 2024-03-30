@@ -1,5 +1,5 @@
-import { fetchProfileSpaces, getSpaceIdFromStorage, joinSpace, storeSpaceInStorage } from "@/lib/api/space";
-import { Space } from "@/lib/api/types";
+import { fetchProfileSpaces, getSpaceIdFromStorage, joinSpace, storeSpaceInStorage, updateSpaceSettings } from "@/lib/api/space";
+import { Space, SpaceSettings } from "@/lib/api/types";
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
 
@@ -54,6 +54,26 @@ export class ProfileSpaceState {
     async joinSpace(spaceId: number) {
         const space = await joinSpace(spaceId);
         this.profileSpaces.push({...space});
+    }
+
+    async updateSetting(setting: SpaceSettings ) {
+        if (this.selectedSpace === undefined) throw new Error('Cannot update settings without space');
+        const res = await updateSpaceSettings(this.selectedSpace.id, {...this.selectedSpace.settings, ...setting})
+        this.selectedSpace.settings = res.settings
+    }
+
+    async addApp(appId: string) {
+        if (this.selectedSpace === undefined) throw new Error('No space selected');
+        const apps = this.selectedSpace.settings.apps ? [...this.selectedSpace.settings.apps] : []
+        apps.push(appId);
+        return await this.updateSetting({apps});
+    }
+
+    async removeApp(appId: string) {
+        if (this.selectedSpace === undefined) throw new Error('No space selected');
+        const apps = this.selectedSpace.settings.apps ? [...this.selectedSpace.settings.apps] : []
+        return await this.updateSetting({apps: apps.filter((id) => id != appId)});
+        
     }
 }
 

@@ -5,10 +5,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { fetchAllSpaces } from "@/lib/api/space";
 import { Space } from "@/lib/api/types";
 import { ProfileSpaceStateContext } from "@/states/profile_space.state";
+import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 
-export default function SpaceView() {
+function _SpaceView() {
+    
     const profileSpaceState = useContext(ProfileSpaceStateContext)
+    console.log('rebuilt', profileSpaceState.selectedSpace?.id)
     const {toast} = useToast()
     const [showLoading, setShowLoading] = useState(false);
     const [spaces, setSpaces] = useState<Space[]>([])
@@ -28,7 +31,7 @@ export default function SpaceView() {
         })
     }, [])
 
-
+    const joinedSpaces = (profileSpaceState.profileSpaces || []).map(space => space.id)
 
     return (
         <div className="w-full h-full">
@@ -38,10 +41,13 @@ export default function SpaceView() {
                     {
                         showLoading
                         ? <CircularProgressIndicator />
-                        :spaces.map((space) => <SpaceCard space={space} hasJoinedSpace={false} onJoinClick={profileSpaceState.joinSpace}  />)
+                        :spaces.map((space) => <SpaceCard space={space} key={space.id} hasJoinedSpace={joinedSpaces.includes(space.id)} onJoinClick={profileSpaceState.joinSpace}  />)
                     }
                 </div>
             </div>
         </div>
     )
 }
+
+const SpaceView = observer(_SpaceView);
+export default SpaceView;

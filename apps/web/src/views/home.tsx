@@ -3,27 +3,37 @@ import {
     MirakiGlobalState, 
     MirakiGlobalStateContext, 
     MirakiPeripheralsComponent, 
-    MirakiPeripheralsPlugin, 
     MirakiSidebarView, 
-    MirakiSidebarViewPlugin, 
     MirakiView, 
-    MirakiViewPlugin
-} from '@miraki/miraki-core';
 
-import MirakiSnapshotPlugin from '@miraki/miraki-snapshot'
+} from '@miraki/miraki-core';
+import { useContext } from "react";
+import { ProfileSpaceStateContext } from "@/states/profile_space.state"
+
 
 import { createPluginStore, PluginProvider } from 'react-pluggable';
+import { AppRepository } from "@/lib/app_repository";
+import { observer } from "mobx-react-lite";
 
-const pluginStore = createPluginStore()
-pluginStore.install(new MirakiPeripheralsPlugin())
-const sidebarViewPlugin = new MirakiSidebarViewPlugin()
-pluginStore.install(new MirakiViewPlugin())
-pluginStore.install(sidebarViewPlugin)
-pluginStore.install(new MirakiSnapshotPlugin())
+const appRepository = new AppRepository();
 
 
-export default function HomeView() {
+
+
+
+function _HomeView() {
+
+    const profileSpaceState = useContext(ProfileSpaceStateContext);
     const mirakiGlobalState = new MirakiGlobalState();
+
+    appRepository.init();
+    const pluginStore = createPluginStore()
+
+    appRepository.installSystemApps(pluginStore)
+    appRepository.installAppsInPlugin(pluginStore, profileSpaceState.selectedSpace?.settings?.apps || []);
+    console.log('Homer', pluginStore)
+    
+
     return (<div className="w-full h-full">
                 <NavigationHeader />
                 <div className="w-full h-[90%] flex">
@@ -43,3 +53,6 @@ export default function HomeView() {
                 </div>
             </div>)
 }
+
+const HomeView = observer(_HomeView);
+export default  HomeView;
