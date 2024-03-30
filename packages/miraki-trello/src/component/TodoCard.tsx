@@ -48,7 +48,6 @@ function TodoCard({ todo, index, id, innerRef, draggableProps, dragHandleProps }
                     <CardHeader>
                         <CardTitle>{todo.title}</CardTitle>
                         {/* You can put the description here */}
-                        <CardDescription>Deploy your new project in one-click.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <button onClick={()=>deleteTask(index,todo,id)} className='text-red-500 hover:text-red-600' style={{ position: 'absolute', top: '10px', right: '10px' }}>
