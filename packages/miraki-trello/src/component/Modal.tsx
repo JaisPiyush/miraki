@@ -53,7 +53,7 @@ function Modal() {
               leaveFrom='opacity-100'
               leaveTo="opacity-0">
               <Dialog.Panel className="max-w-md w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 pb-2">
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 pb-2" style={{color: 'black !important'}}>
                   Add a Task
                 </Dialog.Title>
                 <div className='mt-2'>
@@ -63,6 +63,7 @@ function Modal() {
                     onChange={(e) => setNewTaskInput(e.target.value)}
                     placeholder='Enter a Task Here'
                     className='w-full border border-gray-300 rounded-md outline-none p-5'
+                    style={{color: 'black'}}
                   />
                 </div>
                 <TaskTypeRadioGroup />
@@ -72,6 +73,8 @@ function Modal() {
                     onClick={() => {
                       imagePickerRef.current?.click();
                     }}
+                    style={{color: 'black'}}
+
                     className='w-full border border-gray-300 rounded-md outline-none p-5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2'
                   >
                     Upload Image
