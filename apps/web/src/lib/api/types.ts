@@ -16,7 +16,7 @@ export enum ConnectionStatus {
 }
 
 export interface SpaceSettings extends  Record<string, unknown>{
-
+    apps: string[];
 }
 
 export interface Space {

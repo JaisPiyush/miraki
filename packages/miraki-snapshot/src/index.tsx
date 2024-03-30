@@ -3,6 +3,7 @@ import './index.css'
 import {IPlugin, PluginStore} from 'react-pluggable';
 import { SpaceView } from './views/spaceMain';
 
+
 const node = {
     name: 'Snapshot',
     id: 'snapshot',

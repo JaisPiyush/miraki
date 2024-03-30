@@ -4,6 +4,7 @@ import {
 import LoginView from "@/views/login_view.tsx";
 import HomeView from "@/views/home";
 import SpaceView from "@/views/space_view";
+import AppsView from "@/views/apps";
 
 const browserRouter = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ const browserRouter = createBrowserRouter([
     {
         path: '/spaces',
         element: <SpaceView />
+    },
+    {
+        path: '/apps',
+        element: <AppsView />
     }
 ]);
 

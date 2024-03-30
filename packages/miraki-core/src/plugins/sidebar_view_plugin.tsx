@@ -10,7 +10,7 @@ export class MirakiSidebarViewPlugin implements IPlugin {
 
     name = "MirakiSidebarViewPlugin@1.0.0";
     public pluginStore: PluginStore  = new PluginStore();
-    private nodes: miraki.TreeNode.TreeNode[] = [];
+    private nodes = new Map<string, miraki.TreeNode.TreeNode>();
 
 
     getPluginName() {
@@ -28,14 +28,14 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     addToNodes(
         node: TreeNodeOptions
     ) {
-        this.nodes.push(new TreeNode(node));
+        this.nodes.set(node.id, new TreeNode(node))
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
     }
 
     removeFromNodes(
         node: miraki.TreeNode.TreeNode
     ) {
-        this.nodes = this.nodes.filter((n) => n.id !== node.id);
+        this.nodes.delete(node.id)
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
     }
 
@@ -77,7 +77,7 @@ export class MirakiSidebarViewPlugin implements IPlugin {
 
         this.pluginStore.addFunction(
             'MirakiSidebarView.getNodes', () => {
-                return this.nodes;
+                return Array.from(this.nodes.values());
         });
 
         this.pluginStore.addFunction(
