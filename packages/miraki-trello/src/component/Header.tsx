@@ -6,8 +6,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { useBoardStore } from '@/store/BoardStore';
-import { useEffect, useState } from 'react';
-import fetchSuggestion from '@/lib/fetchSuggestion';
+import { useEffect } from 'react';
 
 
 function Header() {
@@ -44,10 +43,8 @@ function Header() {
     </Avatar>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">
-              Hello there,
+              Hello there
             </p>
-            <p className="text-sm text-muted-foreground">
-      </p>
           </div>
         </div>
       </div>
