@@ -22,12 +22,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import MDEditor, { selectWord } from "@uiw/react-md-editor";
+import MDEditor from "@uiw/react-md-editor";
 // No import is required in the WebPack.
 import "@uiw/react-md-editor/markdown-editor.css";
 // No import is required in the WebPack.
 import "@uiw/react-markdown-preview/markdown.css";
-import { useTheme } from "styled-components";
+
 
 
 const proposalFormSchema = z.object({
@@ -43,7 +43,7 @@ const proposalFormSchema = z.object({
   }),
   // Timestamp should be sent to backend in format
   // yyyy-mm-ddTHH:MM:SS
-  options: z.array(z.string().min(1, { message: "Atlest add one option." })),
+  options: z.array(z.string().min(1, { message: "At least add one option." })),
   start_timestamp: z.date({
     required_error: "Start date is required",
   }),
@@ -56,7 +56,7 @@ export default function CreateProposalView() {
   const form = useForm<z.infer<typeof proposalFormSchema>>({
     resolver: zodResolver(proposalFormSchema),
     defaultValues: {
-      space: '1',
+      // space: '1',
       strategy_details: {
         // Set a default id here
         id: "spl-token-balance",
