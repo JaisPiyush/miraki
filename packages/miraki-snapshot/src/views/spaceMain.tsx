@@ -70,7 +70,6 @@ export function SpaceView() {
                   )
             )}
         </div>
-
       </div>
     </>
   );

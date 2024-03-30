@@ -26,7 +26,7 @@ export function Proposal({title, description , options }: CardData) {
     <CardHeader>
       <CardTitle style={{marginBottom: '15px'}}>{title}</CardTitle>
       <CardDescription>
-     {description}
+         {description}
       </CardDescription>
     </CardHeader>
     <CardContent>
