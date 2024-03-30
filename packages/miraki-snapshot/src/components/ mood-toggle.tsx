@@ -6,6 +6,7 @@ export function ModeToggle() {
   const { theme, setTheme } = useTheme()
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
+    localStorage.setItem('theme',theme === 'light' ? 'dark' : 'light' )
   }
 
   return (
