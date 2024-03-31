@@ -7,6 +7,9 @@ import { BaseProgramBuilder } from "./base_program_builder";
 
 import { web3 } from "@project-serum/anchor";
 import { Button } from '@/components/ui/button';
+import { IdlFieldBuilder } from './idl_field_builder';
+import { InstructionTypeBuilder } from './idl_instruction_builder';
+import { Accordion } from '@/components/ui/accordion';
 
 function BuilderPreviewer(props: {builder: BaseProgramBuilder, func: (val: any) => any}) {
     const [state, setState] = useState<any>()
@@ -17,12 +20,105 @@ function BuilderPreviewer(props: {builder: BaseProgramBuilder, func: (val: any) 
         setState(value)
     }
 
-    return <div className='flex flex-col p-4 w-[400px] h-[400px] justify-between'>
+    return <div className='flex flex-col p-4 w-[600px] h-[400px] justify-between'>
             <BuilderComponent />
             <Button variant={"default"} onClick={() => {handleClick()}}>Click</Button>
             <p>{state}</p>
     </div>
 }
+
+const instructions = [
+    {
+        "name": "createXnft",
+        "discriminator": [232, 16, 8, 240, 20, 109, 214, 66],
+        "docs": [
+          "Creates all parts of an xNFT instance.",
+          "",
+          "* Master mint (supply 1).",
+          "* Master token.",
+          "* Master metadata PDA associated with the master mint.",
+          "* Master edition PDA associated with the master mint.",
+          "* xNFT PDA associated with the master edition.",
+          "",
+          "Once this is invoked, an xNFT exists and can be \"installed\" by users."
+        ],
+        "accounts": [
+          {
+            "name": "masterMint",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "masterToken",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "masterMetadata",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "masterEdition",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "xnft",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "payer",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "publisher",
+            "isMut": false,
+            "isSigner": true
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "tokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "associatedTokenProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "metadataProgram",
+            "isMut": false,
+            "isSigner": false
+          },
+          {
+            "name": "rent",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": [
+          {
+            "name": "name",
+            "type": "bool"
+          },
+          {
+            "name": "curator",
+            "type": {
+              "option": "publicKey"
+            }
+          },
+        ],
+        "returns": "bool"
+      }
+]
 
 export default {
     'NumberTypeBuilder': () => {
@@ -63,5 +159,25 @@ export default {
                     builder={booleanTypeBuilder}
                     func={(val: number[]) => val.toString()}
                 />
+    },
+    'IdlFieldBuilder': () => {
+        const booleanTypeBuilder = new IdlFieldBuilder({
+            name: 'frozenName',
+            docs: ['Name for forzen account'],
+            type: {
+                vec: 'u128'
+            }
+        });
+        return <BuilderPreviewer
+                    builder={booleanTypeBuilder}
+                    func={(val: number[]) => val.toString()}
+                />
+    },
+    'IdlInstructions': () => {
+        const idlInstructionBuilder = new InstructionTypeBuilder(instructions[0] as any)
+        const InstructionComponent = idlInstructionBuilder.toComponent({});
+        return <Accordion type='single' collapsible className="w-full px-4">
+                <InstructionComponent />
+        </Accordion>
     }
 }

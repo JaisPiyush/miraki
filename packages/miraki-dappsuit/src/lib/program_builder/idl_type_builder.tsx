@@ -1,5 +1,5 @@
 import { Input, InputProps } from "@/components/ui/input";
-import { BaseProgramBuilder, IdlBuildersWithChildren } from "./base_program_builder";
+import { BaseProgramBuilder, BaseProgramBuilderStaticInterface, IdlBuildersWithChildren } from "./base_program_builder";
 import { miraki_dappsuit } from "@/miraki_dappsuit";
 import React, { FC, MutableRefObject, useEffect, useRef } from "react";
 import {BN} from '@project-serum/anchor'
@@ -49,6 +49,7 @@ export class IdlTypeInputBuilder<T = miraki_dappsuit.solana.IdlType, R = unknown
                     const value = val.target.value;
                     this.inputRef!.current = value
                 }}
+                className="w-full max-w-96"
             />
             }
         }
@@ -74,6 +75,10 @@ export class IdlTypeInputBuilder<T = miraki_dappsuit.solana.IdlType, R = unknown
                 throw new RequiredInputError('Input is required');
             }
             return this._toValue();
+        }
+
+        toRepr(): string {
+            return this.idl as string
         }
 }
 
@@ -110,7 +115,7 @@ export class NumberTypeBuilder extends
     }
 
     transformContext(context: miraki_dappsuit.BuildContext<InputProps>): miraki_dappsuit.BuildContext<InputProps> {
-        context.props!.type = 'number';
+        // context.props!.type = 'number';
         return context;
     }
 
@@ -237,11 +242,16 @@ export class BooleanTypeBuilder extends
     }
 
 
+    toRepr(): string {
+        return 'bool'
+    }
+
+
 
 }
 
-type IdlTypesArrayOutput = BN[] | string[] | web3.PublicKey[];
-type IdlTypeOutputTypes = BN | string | web3.PublicKey | IdlTypesArrayOutput;
+export type IdlTypesArrayOutput = BN[] | string[] | web3.PublicKey[];
+export type IdlTypeOutputTypes = BN | string | web3.PublicKey | IdlTypesArrayOutput;
 
 export class IdlTypeOptionBuilder
     extends IdlBuildersWithChildren<
@@ -302,6 +312,10 @@ export class IdlTypeOptionBuilder
         }
     }
 
+    toRepr() {
+        return `Option<${this.child!.toRepr()}>`
+    }
+
 
 }
 
@@ -321,6 +335,7 @@ export class IdlTypeArrayBuilder extends
 
         ]
 
+        child?: IdlTypeBuilder;
 
         static isSuitableIdlBuilder(idl: any): boolean {
             return idl.vec !== undefined || (idl.array !== undefined && idl.array.length === 2);
@@ -353,71 +368,56 @@ export class IdlTypeArrayBuilder extends
 
         }
 
+        toComponent(context: miraki_dappsuit.BuildContext<InputProps, IdlTypesArrayOutput | undefined>): React.FC {
+            const [type, ] = this.getTypeAndSize();
+            this.child = new IdlTypeBuilder(type);
+            context.props = context.props || {}
+            return this.child.toComponent(context);
+        }
+
+        toRepr(): string {
+            const [type, size] = this.getTypeAndSize();
+            return `Vec<${this.child!.toRepr()}${size ? ',' + size : ''}>`;
+        }
 }
 
-// export class IdlTypeArrayBuilder
-//     extends IdlBuildersWithChildren<
-//         miraki_dappsuit.solana.IdlTypeArray 
-//         | miraki_dappsuit.solana.IdlTypeVec,
-//         React.PropsWithChildren,
-//         IdlTypeOutputTypes | undefined
-//     > {
 
-//     childrenBuildersClass = [
-//         NumberTypeBuilder,
-//         StringTypeBuilder,
-//         PublicKeyTypeBuilder,
-//         BytesTypeBuilder,
-//         BooleanTypeBuilder,
-//         IdlTypeOptionBuilder,
-//         IdlTypeArrayBuilder
-//     ]
+export class IdlTypeBuilder extends
+    BaseProgramBuilder<
+        miraki_dappsuit.solana.IdlType,
+        InputProps | SwitchProps,
+        IdlTypeOutputTypes
+    > {
 
-//     static isSuitableIdlBuilder(idl: any): boolean {
-//         return idl.vec !== undefined || (idl.array !== undefined && idl.array.length === 2);
-//     }
+    static builderClasses = [
+        NumberTypeBuilder,
+        StringTypeBuilder,
+        PublicKeyTypeBuilder,
+        BytesTypeBuilder,
+        BooleanTypeBuilder,
+        IdlTypeOptionBuilder,
+        IdlTypeArrayBuilder
+    ]
 
-//     transformContext(context: miraki_dappsuit.BuildContext<React.PropsWithChildren, IdlTypeOutputTypes | undefined>) {
-//         return context;
-//     }
+    builder?: BaseProgramBuilder
 
+    static isSuitableIdlBuilder(idl: unknown): boolean {
+        const filtered = this.builderClasses.filter((cls) => cls.isSuitableIdlBuilder(idl as any))
+        return filtered.length === 1
+    }
 
-//     getTypeAndSize(): [miraki_dappsuit.solana.IdlType, number | undefined] {
-//         return (this.idl as any).vec !== undefined
-//         ? [(this.idl as miraki_dappsuit.solana.IdlTypeVec).vec, undefined]
-//         : (this.idl as miraki_dappsuit.solana.IdlTypeArray).array
-//     }
-    
-//     toComponent(context: miraki_dappsuit.BuildContext<React.PropsWithChildren, IdlTypeOutputTypes | undefined>): React.FC {
-//         this.validateIDL(true);
-//         context.props = context.props || {};
-//         context = this.transformContext(context);
+    toComponent(context: miraki_dappsuit.BuildContext<InputProps | SwitchProps, unknown>): React.FC {
+        const builderClass = IdlTypeBuilder.builderClasses.filter((cls) => cls.isSuitableIdlBuilder(this.idl as any))[0]
+        this.builder = new builderClass(this.idl as any);
+        return this.builder.toComponent(context as any);
+    }
 
-//         const [type, size] = this.getTypeAndSize();
+    toValue() {
+        return this.builder?.toValue()
+    }
 
-//         const childComponent = this.getChildBuilder(type);
-//         this.child = new childComponent(type);
-//         return this.child.toComponent(context);
-//     }
+    toRepr(): string {
+        return this.builder?.toRepr() || '';
+    }
+}
 
-//     toValue() {
-//         if (this.child === undefined) {
-//             throw new Error("no child value found")
-//         }
-
-//         try {
-//             const value =  this.child.toValue();
-//             if (this.child instanceof NumberTypeBuilder) {
-//                 return Number.isNaN(value) ? undefined: value;
-//             }
-
-//             return value;
-//         } catch (e) {
-//             if ((e as any).message === 'Invalid public key input') {
-//                 throw e;
-//             }
-//         }
-//     }
-
-
-// }

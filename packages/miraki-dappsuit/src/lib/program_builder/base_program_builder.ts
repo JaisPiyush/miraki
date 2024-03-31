@@ -33,6 +33,10 @@ export class BaseProgramBuilder<T = unknown, P = unknown, R = unknown> implement
         throw new Error("Method not implemented.");
     }
 
+    toRepr(): string {
+        throw new Error('Method not implemented')
+    }
+
 }
 
 
