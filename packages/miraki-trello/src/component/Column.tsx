@@ -38,7 +38,7 @@ function Column({ id, todos, index }: Props) {
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
 
-                                className={`p-2 rounded-2xl shadow-sm ${snapshot.isDraggingOver ? "bg-green-500" : "bg-muted/40"}`}
+                                className={`p-2 rounded-2xl shadow-sm  ${snapshot.isDraggingOver ? "bg-green-500" : "bg-secondary"}`}
                             >
                                 <h3 className="flex justify-between scroll-m-20 text-2xl font-semibold tracking-tight" style={{ paddingLeft: '8px', paddingRight: '8px', marginTop: '20px', marginBottom: '20px' }}>
                                     {idToColumnText[id]}

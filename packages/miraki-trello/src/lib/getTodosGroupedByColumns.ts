@@ -1,9 +1,20 @@
-import { databases } from "@/appwrite";
+import { appWriteDbId, appWriteTodoCollectionId, databases } from "@/appwrite_config";
+// import {Query} from 'appwrite'
 
 export const getTodosGroupedByColumns = async () => {
-    const data = await databases.listDocuments("6601bb83306973dd9d91", "6601bba865f031e7a66f");
-    const todos = data.documents;
-    const columns = todos.reduce((acc, todo) => {
+    const spaceId = window.miraki?.spaceId;
+    let todos: Todo[] = []
+    try {
+        const data = await databases.listDocuments(appWriteDbId, appWriteTodoCollectionId,
+            // [
+            //     Query.equal('spaceId', [spaceId])
+            // ]
+            );
+        todos = data.documents as unknown as Todo[];
+    } catch {
+        todos = []
+    }
+    const columns: Map<TypedColumn,Column> = todos.filter(todo => todo.spaceId === spaceId).reduce((acc, todo) => {
         if (!acc.get(todo.status)) {
             acc.set(todo.status, {
                 id: todo.status,
@@ -12,14 +23,11 @@ export const getTodosGroupedByColumns = async () => {
         }
     
         acc.get(todo.status)!.todos.push({
-            $id: todo.$id,
-            $createdAt: todo.$createdAt,
-            title: todo.title,
-            status: todo.status,
-            ...(todo.image && { image: JSON.parse(todo.image) })
+            ...todo,
+            ...(todo.image && { image: JSON.parse(todo.image as string) })
         });
         return acc;
-    }, new Map<TypedColumn, Column>());
+    }, new Map<TypedColumn, Column>([["todo", {id: "todo", todos: []}], ["inprogress", {id: "inprogress", todos: []}], ["done", {id: "done", todos: []}]]));
     console.log("Todos:", todos);
 
     const columnTypes: TypedColumn[] = ["todo", "inprogress", "done"];
@@ -32,7 +40,7 @@ export const getTodosGroupedByColumns = async () => {
         }
     }
 
-    const sortedColumns = new Map(
+    const sortedColumns = new Map<TypedColumn, Column>(
         Array.from(columns.entries()).sort(
             (a, b) =>
                 columnTypes.indexOf(a[0]) - columnTypes.indexOf(b[0])

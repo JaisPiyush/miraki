@@ -9,3 +9,11 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+declare global {
+  interface Window {
+      miraki?: {
+          spaceId: number;
+      }
+  }
+}

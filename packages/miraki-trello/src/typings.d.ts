@@ -14,10 +14,13 @@ interface Todo{
     $createdAt:string;
     title:string;
     status:TypedColumn;
-    image?:Image;
+    spaceId?: number;
+    image?: BucketImage | string;
 }
 
-interface Image {
+interface BucketImage {
     bucketId:string;
     fileId:string;
 }
+
+

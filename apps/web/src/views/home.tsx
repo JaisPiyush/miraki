@@ -32,7 +32,7 @@ function _HomeView() {
 
     appRepository.installSystemApps(pluginStore)
     appRepository.installAppsInPlugin(pluginStore, profileSpaceState.selectedSpace?.settings?.apps || []);
-    console.log('Homer', pluginStore)
+    console.log('Homer', pluginStore,profileSpaceState.selectedSpace?.settings?.apps)
     
 
     return (<div className="w-full h-full">

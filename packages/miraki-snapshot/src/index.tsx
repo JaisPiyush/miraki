@@ -38,7 +38,6 @@ export default class MirakiSnapshotPlugin implements IPlugin {
             }
         );
 
-        // TODO: Add Create proposal
         this.pluginStore.addFunction(
             'MirakiSnapshotPlugin.launchCreateProposalView',
             (node: any) => {

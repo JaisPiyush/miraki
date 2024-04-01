@@ -1,22 +1,14 @@
-import React from 'react';
-import Header from '@/component/Header';
+
 import Board from '@/component/Board';
-import { ThemeProvider } from './components/theme-provider';
-import { ModeToggle } from './components/mood-toggle';
 import Modal from './component/Modal';
 
 function App() {
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div style={{paddingLeft: "10%", paddingRight: "10%", paddingBottom: "150px", paddingTop: '50px'  }}>
-       <ModeToggle/>
-       <Header />
+      <div className='w-full px-4 py-10 scroll-m-2 flex justify-center'>
        <Board /> 
        <Modal/>
-      {/* Add other components or content here */}
       </div>
-      </ThemeProvider>
   );
 }
 

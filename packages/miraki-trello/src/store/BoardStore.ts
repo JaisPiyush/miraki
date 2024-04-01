@@ -1,7 +1,9 @@
-import { ID, databases,storage} from '@/appwrite';
+import { ID, appWriteDbId, appWriteTodoCollectionId, databases,storage} from '@/appwrite_config';
 import { getTodosGroupedByColumns } from '@/lib/getTodosGroupedByColumns';
 import uploadImage from '@/lib/uploadImage';
 import { create } from 'zustand'
+
+
 
 interface BoardState {
   board: Board;
@@ -44,27 +46,28 @@ export const useBoardStore = create<BoardState>((set,get) => ({
   setImage: (image: File | null) => set({ image }), 
 
 
-  deleteTask:async(taskIndex:number,todo:Todo,id:TypedColumn)=>{
+  deleteTask: async(taskIndex:number,todo:Todo,id:TypedColumn)=>{
     const newColumns=new Map(get().board.columns);
 
     newColumns.get(id)?.todos.splice(taskIndex,1);
     set({board:{columns:newColumns}});
     
     if(todo.image){
-      await storage.deleteFile(todo.image.bucketId,todo.image.fileId);
+      const image = todo.image as BucketImage;
+      await storage.deleteFile(image.bucketId, image.fileId);
     }
 
-    await databases.deletDocument(
-      "6601bb83306973dd9d91",
-      "6601bba865f031e7a66f",
+    await databases.deleteDocument(
+      appWriteDbId,
+      appWriteTodoCollectionId,
       todo.$id
     )
 
   },
   updateTodoInDB: async (todo, columnId) => {
     await databases.updateDocument(
-      "6601bb83306973dd9d91",
-      "6601bba865f031e7a66f",
+      appWriteDbId,
+      appWriteTodoCollectionId,
       todo.$id,
       {
         title: todo.title,
@@ -73,7 +76,8 @@ export const useBoardStore = create<BoardState>((set,get) => ({
     );
   },
   addTask: async (todo: string, columnId: TypedColumn, image?: File | null) => {
-    let file: Image | undefined;
+    let file: BucketImage | undefined;
+    const spaceId = window.miraki?.spaceId;
     if (image) {
       const fileUploaded = await uploadImage(image);
       if (fileUploaded) {
@@ -85,12 +89,13 @@ export const useBoardStore = create<BoardState>((set,get) => ({
     }
 
     const { $id } = await databases.createDocument(
-      "6601bb83306973dd9d91",
-      "6601bba865f031e7a66f",
+      appWriteDbId,
+      appWriteTodoCollectionId,
       ID.unique(),
       {
         title: todo,
         status: columnId,
+        spaceId: spaceId,
         ...(file && { image: JSON.stringify(file) }),
       }
     );

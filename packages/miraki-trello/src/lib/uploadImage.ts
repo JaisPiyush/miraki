@@ -1,9 +1,9 @@
-import{ID,storage}from"@/appwrite";
+import{appWriteBucketId, ID,storage}from"@/appwrite_config";
 
 const uploadImage=async(file:File)=>{
     if(!file)return;
-    const fileUploaded=await storage.createFile(
-        "6601c16befe79cb01e1a",
+    const fileUploaded = await storage.createFile(
+        appWriteBucketId,
         ID.unique(),
         file
     );
