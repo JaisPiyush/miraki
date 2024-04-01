@@ -1,6 +1,17 @@
 {
     "version": "0.1.0",
     "name": "xnft",
+    "docs": [
+      "Creates all parts of an xNFT instance.",
+      "",
+      "* Master mint (supply 1).",
+      "* Master token.",
+      "* Master metadata PDA associated with the master mint.",
+      "* Master edition PDA associated with the master mint.",
+      "* xNFT PDA associated with the master edition.",
+      "",
+      "Once this is invoked, an xNFT exists and can be \"installed\" by users."
+    ],
     "constants": [
       {
         "name": "MAX_NAME_LEN",

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { miraki_dappsuit } from "@/miraki_dappsuit";
 import { IdlBuildersWithChildren } from "./base_program_builder";
 import { IdlTypeBuilder, RequiredInputError } from "./idl_type_builder";
@@ -28,7 +30,7 @@ export class IdlFieldBuilder extends
             const dType = this.child.toRepr();
             return () => {
                 return <div className="w-full flex items-center justify-between px-4 py-4 border bg-background">
-                    <Label className="mr-4">{this.idl.name}({dType})</Label>
+                    <Label className="mr-4">{this.idl.name} ({dType})</Label>
                     <ChildComponent />
                 </div>
             }
@@ -67,7 +69,11 @@ export class IdlAccountInputBuilder extends
             type: 'publicKey'
         }
         this.field = new IdlFieldBuilder(fieldIdl)
+        return this.field.toComponent(context);
+    }
 
+    toValue(): web3.PublicKey {
+        return this.field!.toValue() as web3.PublicKey
     }
 
 }

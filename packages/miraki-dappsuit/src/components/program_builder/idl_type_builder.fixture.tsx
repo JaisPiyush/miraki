@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { IdlFieldBuilder } from './idl_field_builder';
 import { InstructionTypeBuilder } from './idl_instruction_builder';
 import { Accordion } from '@/components/ui/accordion';
+import * as idl from './idl.json'
+import { IdlProgramTypeBuilder } from './idl_program_builder';
 
 function BuilderPreviewer(props: {builder: BaseProgramBuilder, func: (val: any) => any}) {
     const [state, setState] = useState<any>()
@@ -179,5 +181,10 @@ export default {
         return <Accordion type='single' collapsible className="w-full px-4">
                 <InstructionComponent />
         </Accordion>
+    },
+    'IdlProgramBuilder': () => {
+      const idlProgramBuilder = new IdlProgramTypeBuilder(idl as any);
+      const ProgramBuilder = idlProgramBuilder.toComponent({})
+      return <ProgramBuilder />
     }
 }

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input, InputProps } from "@/components/ui/input";
-import { BaseProgramBuilder, BaseProgramBuilderStaticInterface, IdlBuildersWithChildren } from "./base_program_builder";
+import { BaseProgramBuilder, IdlBuildersWithChildren } from "./base_program_builder";
 import { miraki_dappsuit } from "@/miraki_dappsuit";
 import React, { FC, MutableRefObject, useEffect, useRef } from "react";
 import {BN} from '@project-serum/anchor'
@@ -381,6 +383,18 @@ export class IdlTypeArrayBuilder extends
         }
 }
 
+export class IdlDefinedTypeBuilder 
+    extends IdlTypeInputBuilder<miraki_dappsuit.solana.IdlTypeDefined> {
+
+    static isSuitableIdlBuilder(idl: any): boolean {
+        return idl.defined !== undefined;
+    }
+
+    toRepr(): string {
+        return this.idl.defined;
+    }
+}
+
 
 export class IdlTypeBuilder extends
     BaseProgramBuilder<
@@ -396,7 +410,8 @@ export class IdlTypeBuilder extends
         BytesTypeBuilder,
         BooleanTypeBuilder,
         IdlTypeOptionBuilder,
-        IdlTypeArrayBuilder
+        IdlTypeArrayBuilder,
+        IdlDefinedTypeBuilder
     ]
 
     builder?: BaseProgramBuilder
@@ -420,4 +435,6 @@ export class IdlTypeBuilder extends
         return this.builder?.toRepr() || '';
     }
 }
+
+
 
