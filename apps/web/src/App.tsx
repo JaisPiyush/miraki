@@ -10,6 +10,7 @@ import './App.css'
 import { ProfileState, ProfileStateContext } from './states/profile.state';
 import { ProfileSpaceState, ProfileSpaceStateContext } from './states/profile_space.state';
 import { ThemeProvider } from '@miraki/miraki-snapshot';
+import { api } from './lib/api/base';
 
 
 
@@ -17,6 +18,8 @@ function App() {
 
   const profileState = new ProfileState();
   const profileSpaceState = new ProfileSpaceState();
+  window.miraki = window.miraki || {}
+  window.miraki.api = api
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

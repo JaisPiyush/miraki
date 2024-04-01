@@ -10,7 +10,8 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 
 const SpaceTile = observer(({profileSpaceState}: {profileSpaceState: ProfileSpaceState}) => {
-    return <div onClick={() => {profileSpaceState.setShowSpaceSelectionModal(true)}} className="flex items-center border border-gray-200 py-2 px-4 rounded-md bg-gray-100">
+    return <div onClick={() => {profileSpaceState.setShowSpaceSelectionModal(true)}} 
+    className="flex items-center border  py-2 px-4 rounded-md bg-secondary">
                 <Avatar className="cursor-pointer">
                     <AvatarImage src={profileSpaceState.selectedSpace?.avatar || "https://github.com/shadcn.png"} />
                     <AvatarFallback>CN</AvatarFallback>
@@ -41,7 +42,7 @@ export default function NavigationHeader() {
     })
 
     return (
-        <div className="w-full h-[10%] bg-background flex py-2 px-6 border border-t-0 border-r-0 border-l-0 border-gray-200">
+        <div className="w-full h-[10%] bg-background flex py-2 px-6 border border-t-0 border-r-0 border-l-0">
            <SpaceTile profileSpaceState={profileSpaceState} />
             <div className="ml-12 flex items-center justify-between">
             <Button variant="ghost"><Link to="/">Dashboard</Link></Button>

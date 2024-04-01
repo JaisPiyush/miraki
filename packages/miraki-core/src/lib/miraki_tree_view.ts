@@ -166,20 +166,28 @@ export class TreeNode extends BaseTreeNode {
         return this.__castChildren(this._children);
     }
 
+    getFlattenIdsOfChildren(): string[] {
+        return this._children.map((child) => child.id);
+    }
+
     getTreeLeafById(id: string): TreeLeaf | TreeNode | undefined {
-        if (this.id === id) {
+        const idParts = id.split('.')
+        if (idParts[0] !== this.id) {
+            return;
+        }
+        if (idParts.length === 1) {
             return this;
         }
+        const restOfIdParts = idParts.slice(1).join('.');
         for (const child of this.children) {
-            if (child.id === id) {
+            if (child instanceof TreeLeaf && child.id === restOfIdParts) {
+                return child
+            } else if(child instanceof TreeNode && child.getTreeLeafById(restOfIdParts)){
                 return child;
             }
         }
     }
 
-    getFlattenIdsOfChildren(): string[] {
-        return this._children.map((child) => child.id);
-    }
 
 
 

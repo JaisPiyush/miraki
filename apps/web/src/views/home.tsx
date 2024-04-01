@@ -14,6 +14,7 @@ import { ProfileSpaceStateContext } from "@/states/profile_space.state"
 import { createPluginStore, PluginProvider } from 'react-pluggable';
 import { AppRepository } from "@/lib/app_repository";
 import { observer } from "mobx-react-lite";
+import { api } from "@/lib/api/base";
 
 const appRepository = new AppRepository();
 
@@ -24,7 +25,7 @@ const appRepository = new AppRepository();
 function _HomeView() {
 
     const profileSpaceState = useContext(ProfileSpaceStateContext);
-    const mirakiGlobalState = new MirakiGlobalState();
+    const mirakiGlobalState = new MirakiGlobalState({api: api, spaceId: profileSpaceState.selectedSpace?.id});
 
     appRepository.init();
     const pluginStore = createPluginStore()

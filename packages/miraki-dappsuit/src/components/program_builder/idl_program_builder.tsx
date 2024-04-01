@@ -20,7 +20,6 @@ interface IdlProgramTypeBuilderProps {
     program?: Program
 }
 
-
 function Events(props: {events: miraki_dappsuit.solana.IdlEvent[]}) {
     return <div className="w-full max-w-screen-lg mt-2 bg-zinc-50 px-4 border pb-4 rounded-md">
         <Collapsible className="w-full">

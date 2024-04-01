@@ -33,6 +33,7 @@ export class ProfileSpaceState {
             this.selectedSpace = spaces[0];
         } else if (getSpaceIdFromStorage() !== null) {
             const spaceId = getSpaceIdFromStorage();
+            window.miraki.spaceId = spaceId;
             const filtered = spaces.filter((space) => space.id === spaceId);
             if (filtered.length === 0) {
                 this.showSpaceSelectionModal = true;

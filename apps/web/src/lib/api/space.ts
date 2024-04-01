@@ -9,6 +9,7 @@ export const getSpaceIdFromStorage = () => {
 
 export const storeSpaceInStorage = (spaceId: number) => {
     window.localStorage.setItem(SELECTED_SPACE_KEY_NAME, spaceId.toString());
+    window.miraki.spaceId = spaceId;
 }
 
 export const fetchProfileSpaces = async () => {

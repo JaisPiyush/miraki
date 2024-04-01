@@ -32,7 +32,7 @@ interface TreeLeafViewProps {
 
 
 const getClassNamesBasedOnInteraction = (isActive: boolean) => {
-  return `${isActive ? "bg-zinc-100" : ""} hover:bg-zinc-50 cursor-pointer`;
+  return `${isActive ? "bg-zinc-100 dark:bg-zinc-400" : ""} hover:bg-zinc-100 dark:hover:bg-zinc-500 cursor-pointer`;
 
 }
 
@@ -115,7 +115,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
       <Collapsible
         open={isOpen}
         onOpenChange={setIsOpen}
-        className={`w-full bg-zinc-100`}
+        className={`w-full bg-secondary`}
       >
         <div className={cn(
           "flex items-center pl-1 pr-2 py-1",
@@ -140,7 +140,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center justify-between w-full">
-                  <h4 className="text-xs font-normal truncate">
+                  <h4 className="text-xs font-normal truncate ml-1">
                     {props.tree.name}
                   </h4>
 

@@ -17,13 +17,13 @@ class SpaceReadOnlyViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action == 'retrieve':
-            return models.Proposal.objects.prefetch_related('space').all()
+            return models.Proposal.objects.prefetch_related('space').all().order_by('-id')
         # Very bad workaround
         space_pk = self.request.space_pk
-        return models.Proposal.objects.prefetch_related('space').filter(space__pk=space_pk)
+        return models.Proposal.objects.prefetch_related('space').filter(space__pk=space_pk).order_by('-id')
     
     def list(self, request, *args, **kwargs):
-        setattr(request, 'space_pk', kwargs['space_pk'])
+        setattr(request, 'space_pk', kwargs['pk'])
         return super().list(request, *args, **kwargs)
     
     def retrieve(self, request, *args, **kwargs):
@@ -31,7 +31,7 @@ class SpaceReadOnlyViewSet(viewsets.ModelViewSet):
 
 class CreateSpaceProposalAPIView(generics.CreateAPIView):
     queryset = models.Proposal.objects.all()
-    serializer_class = serializers.ProposalSerializer
+    serializer_class = serializers.CreateProposalSerializer
 
 class CreateProposalVoteAPIView(views.APIView):
 

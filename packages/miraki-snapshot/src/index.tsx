@@ -1,34 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import './index.css'
 
 import {IPlugin, PluginStore} from 'react-pluggable';
 import { SpaceView } from './views/spaceMain';
+import CreateProposalView from './views/create_proposal';
+import { node } from './plugin';
 
 
-const node = {
-    name: 'Snapshot',
-    id: 'snapshot',
-    tooltip: 'Snapshot: voting app for DAOs',
-    collapsibleState: 0,
-    children: [
-        {
-            id: 'fetch_proposals',
-            name: 'Proposals',
-            tooltip: 'View all proposals in the space',
-            command: {
-                command: 'MirakiSnapshotPlugin.launchProposalView'
-            }
-
-        },
-        {
-            id: 'create_proposal',
-            name: 'Create Proposal',
-            command: {
-                command: 'MirakiSnapshotPlugin.launchCreateProposalView'
-            }
-        }
-    ],
-    actions: {}
-}
 
 export default class MirakiSnapshotPlugin implements IPlugin {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +39,18 @@ export default class MirakiSnapshotPlugin implements IPlugin {
         );
 
         // TODO: Add Create proposal
+        this.pluginStore.addFunction(
+            'MirakiSnapshotPlugin.launchCreateProposalView',
+            (node: any) => {
+                this.pluginStore.executeFunction(
+                    'MirakiVew.set',
+                    () => {
+                        console.log('node setter', node)
+                        return <CreateProposalView />
+                    }
+                )
+            }
+        );
 
         this.pluginStore.executeFunction(
             'MirakiSidebarView.add',
@@ -70,10 +60,12 @@ export default class MirakiSnapshotPlugin implements IPlugin {
 
     deactivate(): void {
         this.pluginStore.removeFunction('MirakiSnapshotPlugin.launchProposalView')
+        this.pluginStore.removeFunction('MirakiSnapshotPlugin.launchCreateProposalView')
         this.pluginStore.removeFunction(
             'MirakiSidebarView.remove',
             node
         )
+        
     }
 
 }

@@ -27,7 +27,14 @@ import MDEditor from "@uiw/react-md-editor";
 import "@uiw/react-md-editor/markdown-editor.css";
 // No import is required in the WebPack.
 import "@uiw/react-markdown-preview/markdown.css";
-
+import {Proposal} from '@/types'
+import { useToast } from "@/components/ui/use-toast";
+import { createProposal } from "@/lib/api";
+// import { usePluginStore } from "react-pluggable";
+import {CircleLoader} from 'react-spinners'
+import { Toaster } from "@/components/ui/toaster";
+import { navigateInPlugin } from "@/plugin";
+import { usePluginStore } from "react-pluggable";
 
 
 const proposalFormSchema = z.object({
@@ -53,6 +60,11 @@ const proposalFormSchema = z.object({
 });
 
 export default function CreateProposalView() {
+
+  const {toast} = useToast();
+  const pluginStore = usePluginStore()
+  const [showLoader, setShowLoader] = React.useState(false)
+
   const form = useForm<z.infer<typeof proposalFormSchema>>({
     resolver: zodResolver(proposalFormSchema),
     defaultValues: {
@@ -67,12 +79,32 @@ export default function CreateProposalView() {
   });
 
   const { fields, append, remove } = useFieldArray({
-    name: "options",
+    name: "options" as never,
     control: form.control,
   });
 
-  function onSubmit(values: z.infer<typeof proposalFormSchema>) {
-    console.log(values);
+
+  const onSubmit = async (values: z.infer<typeof proposalFormSchema>) => {
+    if (showLoader) return;
+    const proposal: Proposal = {
+      ...values,
+      member_quorum: 0.5,
+      space: window.miraki.spaceId
+    }
+    try {
+      setShowLoader(true)
+      await createProposal(window.miraki!.api!, proposal);
+      setShowLoader(false)
+      navigateInPlugin('snapshot.fetch_proposals', pluginStore)
+    } catch (e) {
+      toast({
+        title: 'Error while creating your proposal',
+        description: (e as any).message
+      })
+    } finally {
+      setShowLoader(false)
+    }
+    
   }
 
   React.useEffect(() => {
@@ -90,7 +122,7 @@ export default function CreateProposalView() {
       }}
     >
       <h1
-        className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
+        className="scroll-m-20 text-xl font-extrabold tracking-tight lg:text-5xl"
         style={{ textAlign: "center", marginBottom: "30px" }}
       >
         Create a proposal
@@ -124,9 +156,9 @@ export default function CreateProposalView() {
                   <MDEditor
                     // className="tracking-tight w-md-editor-show-live"
                     height={600}
-                    value={field.value}
+                    value={field.value || ''}
                     onChange={(value) => field.onChange(value)}
-                    data-color-mode={localStorage.getItem("theme")}
+                    data-color-mode={(localStorage.getItem("theme") || undefined) as any}
                   />
                 </FormControl>
 
@@ -246,7 +278,8 @@ export default function CreateProposalView() {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
+                          // date >= new Date(Date.now()) || date < new Date("2100-01-01")
+                          date < new Date(Date.now())
                         }
                         initialFocus
                       />
@@ -290,7 +323,8 @@ export default function CreateProposalView() {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
+                          // date > new Date() || date < new Date("1900-01-01")
+                          date < new Date(Date.now())
                         }
                         initialFocus
                       />
@@ -302,9 +336,10 @@ export default function CreateProposalView() {
             />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{showLoader? <CircleLoader color="#36d7b7" />: 'Create'}</Button>
         </form>
       </Form>
+      <Toaster />
     </div>
   );
 }

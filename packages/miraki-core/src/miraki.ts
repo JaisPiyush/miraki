@@ -9,7 +9,8 @@ export namespace miraki {
     
         export interface Command {
             command: string;
-            args?: unknown[]
+            args?: unknown[];
+            kwargs?: Record<string, unknown>;
         }
     
         export interface TreeNodeAction {
@@ -44,7 +45,6 @@ export namespace miraki {
             };
             setCollapsibleState(state: TreeLeafCollapsibleState): void;
             getParent(): TreeNode | undefined;
-
         }
 
 
