@@ -23,3 +23,16 @@ class RestrictedSpaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Space
         exclude = ['settings', 'members', 'active_proposals','proposals_count','creator',]
+
+class SpaceAppTreeNodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SpaceAppTreeNode
+        fields = '__all__'
+
+
+class SpaceAppTreeNodeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SpaceAppTreeNode
+        fields = '__all__'
+    
+

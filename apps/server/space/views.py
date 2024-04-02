@@ -1,9 +1,10 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import viewsets, filters, permissions
+from rest_framework import viewsets, filters, permissions, generics, views
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
+from django.db.models.query import Q
 
 
 from . import models
@@ -78,3 +79,55 @@ class SpaceViewSet(viewsets.ModelViewSet):
         
 
 
+class SpaceAppTreeNodeDetailViews(viewsets.ModelViewSet):
+                            
+    serializer_class = serializers.SpaceAppTreeNodeSerializer
+    queryset = models.SpaceAppTreeNode.objects.all()
+
+    # def list(self, request, *args, **kwargs):
+    #     return Response({'detail': "Method not allowed"})
+
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+class SpaceAppTreeNodeListView(views.APIView):
+
+    serializer_class = serializers.SpaceAppTreeNodeSerializer
+    queryset = models.SpaceAppTreeNode.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        space_id = kwargs['space_id']
+        app_id = kwargs['app_id']
+        queryset = self.queryset.filter(Q(space=space_id) & Q(app_id=app_id))
+        serializer = self.serializer_class(queryset, many=True, context={'request': request})
+        data = serializer.data
+        node_mapper = {}
+        root_nodes = []
+        for node in data:
+            node_id = str(node["id"])
+            parent_node = str(node["parent_node"]) if node["parent_node"] is not None else None
+            if node_id not in node_mapper:
+                node["children"] = []
+                node_mapper[node_id] = node
+            elif "id" not in node_mapper[node_id]:
+                node["children"] = node_mapper[node_id]["children"]
+                node_mapper[node_id] = node
+            if parent_node is None:
+                root_nodes.append(node_id)
+            elif parent_node in node_mapper:
+                node_mapper[parent_node]["children"].append(node_mapper[node_id])
+                print(node_id, node_mapper[parent_node]["children"])
+            else:
+                node_mapper[parent_node] = {"children": []}
+        # print(root_nodes)
+        return Response([node_mapper[node_id] for node_id in root_nodes])
+        

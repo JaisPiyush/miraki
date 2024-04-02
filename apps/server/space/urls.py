@@ -10,12 +10,24 @@ router.register(
 )
 
 router.register(
+    r'node',
+    views.SpaceAppTreeNodeDetailViews,
+    basename='node'
+)
+
+router.register(
     r'',
     views.SpaceViewSet,
     basename='space'
 )
 
 
+
+
 urlpatterns = [
+    path('<int:space_id>/app/<slug:app_id>/node/', 
+         views.SpaceAppTreeNodeListView.as_view()),
     path('', include(router.urls)),
+    # path('node/', views.SpaceAppTreeNodeDetailViews.as_view()),
+    # path('node/<slug:pk>/',  views.SpaceAppTreeNodeDetailViews.as_view())
 ]
