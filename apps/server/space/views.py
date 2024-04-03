@@ -1,7 +1,7 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import viewsets, filters, permissions, generics, views
+from rest_framework import viewsets, filters, permissions, views
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from django.db.models.query import Q

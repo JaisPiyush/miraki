@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'space.apps.SpaceConfig',
     'proposal.apps.ProposalConfig',
+    'dappsuit.apps.DappsuitConfig',
     'rest_framework.authtoken',
     'authentication.apps.AuthenticationConfig'
 ]
