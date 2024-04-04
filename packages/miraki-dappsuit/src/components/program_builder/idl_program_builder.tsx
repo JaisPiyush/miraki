@@ -12,7 +12,8 @@ import { IdlTypeBuilder } from "./idl_type_builder";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "../ui/button";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, TrashIcon } from "@radix-ui/react-icons";
+
 
 
 
@@ -124,8 +125,12 @@ export class IdlProgramTypeBuilder extends
         return () => {
             return <div className="w-full h-full flex flex-col">
                 <div className="w-full flex justify-center border border-t-0 border-r-0 border-l-0">
-                    <div className="w-full py-4 px-4 max-w-screen-lg">
+                    <div className="w-full py-4 px-4 max-w-screen-lg flex justify-between items-center">
                         <p className="font-semibold text-lg">{this.idl.name} (version {this.idl.version})</p>
+                        <div className="flex">
+                            <Button variant="outline" className="mr-2">Update IDL</Button>
+                            <Button variant="outline"><TrashIcon className="w-4 h-4" /></Button>
+                        </div>
                     </div>
                 </div>
                 <div className="w-full flex flex-col py-4 px-4 pb-10 items-center">
