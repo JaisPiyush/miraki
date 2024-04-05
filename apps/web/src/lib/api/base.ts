@@ -12,7 +12,7 @@ export const hasAuthenticationToken = () => {
 }
 
 export const api = axios.create({
-    baseURL: 'http://localhost:8000/api/',
+    baseURL: import.meta.env['API_BASE_URL'] || 'http://localhost:8000/api/',
     headers: {
         Authorization: getAuthenticationToken()
     }
