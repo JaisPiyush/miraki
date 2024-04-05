@@ -7,6 +7,7 @@ import { ProfileSpaceState, ProfileSpaceStateContext } from "@/states/profile_sp
 import SpaceSelectionDialog from "./SpaceSelectionDialog";
 import { observer } from "mobx-react-lite";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import mirakiLogo from './miraki.svg';
 
 
 const SpaceTile = observer(({profileSpaceState}: {profileSpaceState: ProfileSpaceState}) => {
@@ -49,6 +50,7 @@ export default function NavigationHeader() {
                 <Button variant="ghost"><Link to="/spaces">Spaces</Link></Button>
                 <Button variant="ghost"><Link className="ml" to="/apps">Apps</Link></Button>
             </div>
+            
             <SpaceSelectionDialog />
         </div>
     )
