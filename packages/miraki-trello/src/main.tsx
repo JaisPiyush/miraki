@@ -13,7 +13,7 @@ ReactDOM.render(
 declare global {
   interface Window {
       miraki?: {
-          spaceId: number;
+          spaceId?: number;
       }
   }
 }
