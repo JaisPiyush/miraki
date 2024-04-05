@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
@@ -28,7 +29,7 @@ export default defineConfig({
       fileName: (format) => 'index.js'
     },
     rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies), "react/jsx-runtime"],
+      external: [...Object.keys(packageJson.peerDependencies), "react/jsx-runtime", "buffer"],
     },
   },
   resolve: {
