@@ -6,6 +6,14 @@ import dts from 'vite-plugin-dts'
 import * as packageJson from './package.json'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
 
+
+const isProductionMode = process.env['NODE_BUILD_MODE'] === 'production'
+
+const externals = [...Object.keys(packageJson.peerDependencies), "react/jsx-runtime"]
+if (isProductionMode){
+  externals.push('buffer')
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -29,7 +37,7 @@ export default defineConfig({
       fileName: (format) => 'index.js'
     },
     rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies), "react/jsx-runtime", "buffer"],
+      external: externals,
     },
   },
   resolve: {
