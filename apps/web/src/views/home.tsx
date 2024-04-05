@@ -15,6 +15,10 @@ import { createPluginStore, PluginProvider } from 'react-pluggable';
 import { AppRepository } from "@/lib/app_repository";
 import { observer } from "mobx-react-lite";
 import { api } from "@/lib/api/base";
+import SearchFloatingButton from "@/components/search_floating_button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import SearchDialog from "@/components/search_dialog_content";
+import SearchDialogContent from "@/components/search_dialog_content";
 
 const appRepository = new AppRepository();
 
@@ -47,6 +51,12 @@ function _HomeView() {
                                 <div className="h-full w-[80%] bg-background">
                                     <MirakiView />
                                 </div>
+                                <Dialog>
+                                    <DialogTrigger >
+                                        <SearchFloatingButton />
+                                    </DialogTrigger>
+                                    <SearchDialogContent />
+                                </Dialog>
                             
                             <MirakiPeripheralsComponent />
                         </MirakiGlobalStateContext.Provider>
