@@ -2,6 +2,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
 from rest_framework import generics, viewsets, views, permissions as rf_permissions
+from django.db.models import Q
+from django.contrib.postgres.search import SearchVector
 
 from space import permissions as space_permissions
 from . import serializers
@@ -10,20 +12,19 @@ from . import models
 # Create your views here.
 
 
-class SpaceReadOnlyViewSet(viewsets.ModelViewSet):
+class SpaceProposalReadOnlyViewSet(viewsets.ModelViewSet):
 
     permission_classes = [rf_permissions.AllowAny]
     serializer_class = serializers.ProposalSerializer
 
-    def get_queryset(self):
-        if self.action == 'retrieve':
-            return models.Proposal.objects.prefetch_related('space').all()
-        # Very bad workaround
-        space_pk = self.request.space_pk
-        return models.Proposal.objects.prefetch_related('space').filter(space__pk=space_pk)
+    queryset = models.Proposal.objects.prefetch_related('space').order_by('-id')
     
-    def list(self, request, *args, **kwargs):
-        setattr(request, 'space_pk', kwargs['space_pk'])
+    def list(self, request: Request, *args, **kwargs):
+        query = Q(space=kwargs['pk'])
+        if (search := request.query_params.get('search', None)) is not None:
+            self.queryset = self.queryset.annotate(search=SearchVector('title', 'description'))
+            query &= Q(search=search)
+        self.queryset = self.queryset.filter(query)
         return super().list(request, *args, **kwargs)
     
     def retrieve(self, request, *args, **kwargs):
@@ -31,7 +32,7 @@ class SpaceReadOnlyViewSet(viewsets.ModelViewSet):
 
 class CreateSpaceProposalAPIView(generics.CreateAPIView):
     queryset = models.Proposal.objects.all()
-    serializer_class = serializers.ProposalSerializer
+    serializer_class = serializers.CreateProposalSerializer
 
 class CreateProposalVoteAPIView(views.APIView):
 

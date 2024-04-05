@@ -14,19 +14,34 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from "./ui/accordion"
+import MDEditor from "@uiw/react-md-editor";
+import { Proposal } from "@/types";
 
-interface CardData {
-    title: string;
-    description: string;
-    options: string[]; 
-}
-export function Proposal({title, description , options }: CardData) {
+
+export function ProposalComponent({title, description , options, ...props }: Proposal) {
+  const now = new Date(Date.now())
+  const endDate = new Date(props.end_timestamp);
+  const isLive = now < endDate
   return (
-    <Card>
+    <Card className="max-w-screen-md w-screen">
     <CardHeader>
-      <CardTitle style={{marginBottom: '15px'}}>{title}</CardTitle>
+      <CardTitle style={{marginBottom: '15px'}} className="w-full flex justify-between">{title} 
+        {isLive
+          ? <Button variant={'outline'} className="text-sm text-green-400 border border-green-400" >
+              Online
+            </Button>
+          :<></>
+        }
+        </CardTitle>
       <CardDescription>
-         {description}
+          <MDEditor.Markdown
+            // className="tracking-tight w-md-editor-show-live"
+            // height={600}
+            source={description || ''}
+            data-color-mode={(localStorage.getItem("theme") || undefined) as any}
+            style={{'padding': '1rem'}}
+        
+          />
       </CardDescription>
     </CardHeader>
     <CardContent>

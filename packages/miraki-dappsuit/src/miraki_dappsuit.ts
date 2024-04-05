@@ -252,16 +252,18 @@ export namespace miraki_dappsuit {
         };
     }
 
-    export interface BuildContext<I = unknown, P = unknown> extends Record<string, unknown> {
+    export interface BuildContext<P = unknown, R = unknown> extends Record<string, unknown> {
         props?: React.PropsWithChildren<P>;
-        idl: I
+        value?: R
     }
 
-    export interface IProgramBuilder<T = unknown, P = unknown> {
-        toComponent(context: BuildContext<T,P>): React.ComponentClass;
+    export interface IProgramBuilder<T = unknown, P = unknown, R = unknown> {
+        idl: T;
+        toComponent(context: BuildContext<P>): React.FC;
         validateIDL(raiseError: boolean): boolean;
-        validateInput(raiseError: boolean): boolean;
-        toValue(): solana.IdlField | solana.IdlField[] | solana.IdlType | solana.IdlType[] | solana.IdlAccountItem
+        validateInput(value: unknown ,raiseError: boolean): boolean;
+        toValue(): R
+        
     }
 
 }

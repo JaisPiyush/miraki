@@ -32,6 +32,20 @@ class ProposalSerializer(serializers.ModelSerializer):
             ).exists()
         return repr
 
+class CreateProposalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Proposal
+        fields = '__all__'
+        read_only_fields = [
+            'creator',
+            'votes_count',
+            'vote_selected_options_count',
+        ]
+        
+    def create(self, validated_data):
+        validated_data['creator'] = self.context['request'].profile
+        validated_data['vote_selected_options_count'] = {key: 0 for key in validated_data['options']}
+        return super().create(validated_data)
 
 class ProposalVoteSerializer(serializers.ModelSerializer):
     

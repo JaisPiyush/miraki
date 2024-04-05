@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import MirakiSnapshotPlugin from "@miraki/miraki-snapshot";
+
 import { IPlugin, PluginStore } from "react-pluggable";
 import {
     MirakiPeripheralsPlugin,  
     MirakiSidebarViewPlugin, 
     MirakiViewPlugin
 } from '@miraki/miraki-core';
-
-
+import MirakiSnapshotPlugin from "@miraki/miraki-snapshot";
+import MirakiBoardPlugin from "@miraki/miraki-trello";
+import MirakiDappSuitPlugin from "@miraki/miraki-dappsuit";
 
 export interface AppDetails {
     avatar?: string;
@@ -18,8 +19,7 @@ export interface AppDetails {
 }
 
 export class AppRepository {
-    private appsRecord: Record<string, AppDetails> = {
-    }
+    private appsRecord = new Map<string, AppDetails>()
 
     private systemAppsRecord: Record<string, AppDetails> = {
     }
@@ -30,16 +30,35 @@ export class AppRepository {
     }
 
     initAppRecord() {
-        const mirakiSnapshotPlugin = new MirakiSnapshotPlugin()
-        this.appsRecord = {
-            [this.getPluginName(mirakiSnapshotPlugin)]:  {
-                name: 'Snapshot',
-                app: mirakiSnapshotPlugin,
-                avatar: 'https://avatars.githubusercontent.com/u/72904068?s=280&v=4',
-                description: 'Voting dapp for DAOs',
-                id: this.getPluginName(mirakiSnapshotPlugin)
+        const mirakiSnapshotPlugin = new MirakiSnapshotPlugin();
+        const mirakiBoardPlugin = new MirakiBoardPlugin();
+        const mirakiDappSuitPlugin = new MirakiDappSuitPlugin();
+
+        this.appsRecord.set(this.getPluginName(mirakiSnapshotPlugin),{
+            name: 'Snapshot',
+            app: mirakiSnapshotPlugin,
+            avatar: 'https://avatars.githubusercontent.com/u/72904068?s=280&v=4',
+            description: 'Voting dapp for DAOs',
+            id: this.getPluginName(mirakiSnapshotPlugin)
+        })
+        this.appsRecord.set(this.getPluginName(mirakiBoardPlugin), {
+            name: 'Board',
+            app: mirakiBoardPlugin,
+            avatar: 'https://miro.medium.com/v2/resize:fit:820/1*f79oBRpVEEB9-RrGMTk_5Q.jpeg',
+            description: 'Task management app',
+            id: this.getPluginName(mirakiBoardPlugin)
+        })
+
+        this.appsRecord.set(
+            this.getPluginName(mirakiDappSuitPlugin),
+            {
+             name: 'DappSuit',
+             app: mirakiDappSuitPlugin,
+             avatar: 'https://avatars.githubusercontent.com/u/99892494?s=200&v=4',
+             description: 'Solana program docs generator',
+             id: this.getPluginName(mirakiDappSuitPlugin)
             }
-        }
+        )
 
         
     }
@@ -48,6 +67,7 @@ export class AppRepository {
         const mirakiPeripheralsPlugin = new MirakiPeripheralsPlugin()
         const sidebarViewPlugin = new MirakiSidebarViewPlugin()
         const mirakiViewPlugin = new MirakiViewPlugin()
+        
 
         this.systemAppsRecord = {
             [this.getPluginName(mirakiPeripheralsPlugin)]: {
@@ -74,7 +94,8 @@ export class AppRepository {
     }
 
     getApps(): AppDetails[] {
-        return Object.values(this.appsRecord)
+        console.log(this.appsRecord.values())
+        return Array.from(this.appsRecord.values())
     }
 
     installSystemApps(pluginStore: PluginStore) {
@@ -88,15 +109,25 @@ export class AppRepository {
 
     installAppsInPlugin(pluginStore: PluginStore, appIds: string[]) {
         for (const appId of appIds) {
-            if (this.appsRecord[appId] && !(pluginStore as any).pluginMap.has(appId)) {
-                pluginStore.install(this.appsRecord[appId].app);
+            if (this.appsRecord.has(appId) && !(pluginStore as any).pluginMap.has(appId)) {
+                // pluginStore.install(this.appsRecord.get(appId).app);
+                const app = this.appsRecord.get(appId).app
+                if ((app as any).preFetch !== undefined){
+                    (app as any).preFetch()
+                    .then(() => {
+                        pluginStore.install(app);
+                    })
+                } else {
+                    pluginStore.install(this.appsRecord.get(appId).app);
+                }
+                
             }
         }
     }
 
     uninstallAppsInPlugin(pluginStore: PluginStore, appIds: string[]) {
         for (const appId of appIds) {
-            if (this.appsRecord[appId] && (pluginStore as any).pluginMap.has(appId)) {
+            if (this.appsRecord.has(appId) && (pluginStore as any).pluginMap.has(appId)) {
                 pluginStore.uninstall(appId);
             }
         }

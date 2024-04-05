@@ -10,5 +10,9 @@
             "username": "postgres",
             "password": "password123"
         }
+    ],
+    "cSpell.words": [
+        "dappsuit",
+        "Solana"
     ]
 }

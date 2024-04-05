@@ -32,7 +32,7 @@ interface TreeLeafViewProps {
 
 
 const getClassNamesBasedOnInteraction = (isActive: boolean) => {
-  return `${isActive ? "bg-zinc-100" : ""} hover:bg-zinc-50 cursor-pointer`;
+  return `${isActive ? "bg-zinc-100 dark:bg-zinc-400" : ""} hover:bg-zinc-100 dark:hover:bg-zinc-500 cursor-pointer`;
 
 }
 
@@ -41,6 +41,7 @@ export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLe
   const pluginStore = usePluginStore();
   
   const handleClick = () => {
+    console.log('on leaf click', props.item)
     if (props.item.command && props.item.command.command) {
       pluginStore.executeFunction(props.item.command.command, props.item);
     }
@@ -77,14 +78,15 @@ export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLe
 export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeNodeProps) => {
 
     
-
     if (props.tree instanceof TreeLeaf) {
       return <div className="w-full pl-2">
         <TreeLeafViewComponent item={props.tree} key={props.tree.id} />
       </div>
     }
+    
 
     const [tree] = useState<TreeNode>(() => (props.tree as TreeNode));
+
     const mirakiGlobalState = useMirakiGlobalState();
     
     const isCollapsible = tree.collapsibleState !== undefined;
@@ -115,7 +117,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
       <Collapsible
         open={isOpen}
         onOpenChange={setIsOpen}
-        className={`w-full bg-zinc-100`}
+        className={`w-full bg-secondary`}
       >
         <div className={cn(
           "flex items-center pl-1 pr-2 py-1",
@@ -140,7 +142,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center justify-between w-full">
-                  <h4 className="text-xs font-normal truncate">
+                  <h4 className="text-xs font-normal truncate ml-1">
                     {props.tree.name}
                   </h4>
 
@@ -177,7 +179,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
         <CollapsibleContent className="pl-1">
           {tree.children.map((child) => {
             return <div className="w-full" key={child.id}>
-              <TreeNodeComponent  tree={child} />
+              <TreeNodeComponent  tree={child as any} />
             </div>
           })}
         </CollapsibleContent>

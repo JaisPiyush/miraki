@@ -1,8 +1,10 @@
+import uuid
 
 from typing import Any
 from django.db import models
 from authentication import models as auth_models
 from django.db import transaction
+
 
 # Create your models here.
 
@@ -49,6 +51,30 @@ class Space(models.Model):
         self.members.add(profile)
         self.members_count += 1
 
+class SpaceAppTreeNode(models.Model):
+    id = models.CharField(primary_key=True, max_length=255, default=uuid.uuid4, editable=False)
+    app_id = models.CharField(max_length=255)
+    space = models.ForeignKey(
+        Space,
+        on_delete=models.CASCADE,
+        related_name='space_app_tree_node'
+    )
+    parent_node = models.ForeignKey(
+        'self',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='parent_node_tree_node'
+    )
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    label = models.CharField(max_length=255, null=True, blank=True)
+    tooltip = models.TextField(null=True, blank=True)
+    icon = models.URLField(null=True, blank=True)
+    command = models.JSONField(default=dict)
+    collapsible_state = models.IntegerField(null=True, default=0)
+    action = models.JSONField(default=dict)
+    
 
 
 

@@ -12,6 +12,11 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "web#dev": {
+      "dependsOn": ["@miraki/miraki-core#build"],
+      "cache": false,
+      "persistent": true
     }
   }
 }

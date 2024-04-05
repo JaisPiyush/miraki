@@ -11,14 +11,17 @@ appRepository.initAppRecord();
 function _AppsView() {
     const profileSpaceState = useContext(ProfileSpaceStateContext);
     const apps = appRepository.getApps();
-    console.log('rebuilt', profileSpaceState.selectedSpace?.id)
+    console.log('rebuilt', profileSpaceState.selectedSpace?.id, apps)
 
     return <div className="w-full h-full bg-background flex flex-col">
             <NavigationHeader />
             <div className="w-full h-[90%] bg-background flex justify-center pt-10">
                 <div className="w-[75%] h-auto grid grid-cols-3 gap-4">
                     {
-                        apps.map((app) => <AppCard app={app} key={app.name} />)
+                        apps.map((app) => {
+                            console.log(app)
+                            return <AppCard app={app} key={app.name} />
+                        })
                     }
                 </div>
             </div>

@@ -16,7 +16,7 @@ export default function SpaceListItem(props: SpaceListItemProp) {
         if (props.onSelect) {
             props.onSelect(props.space);
         }
-    }} className="w-full flex items-center border border-gray-300 rounded-md p-4 mt-4">
+    }} className="w-full flex items-center border  rounded-md p-4 mt-4">
                 <Avatar className="cursor-pointer">
                         <AvatarImage src={props.space.avatar || "https://github.com/shadcn.png"} />
                         <AvatarFallback>CN</AvatarFallback>
