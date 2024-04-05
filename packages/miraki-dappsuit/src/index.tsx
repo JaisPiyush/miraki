@@ -12,8 +12,8 @@ import {Axios} from 'axios'
 declare global {
   interface Window {
     miraki?: {
-      api: Axios,
-      spaceId: number
+      api?: Axios,
+      spaceId?: number
     }
 
   }
