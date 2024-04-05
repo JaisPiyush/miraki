@@ -41,6 +41,7 @@ export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLe
   const pluginStore = usePluginStore();
   
   const handleClick = () => {
+    console.log('on leaf click', props.item)
     if (props.item.command && props.item.command.command) {
       pluginStore.executeFunction(props.item.command.command, props.item);
     }
@@ -77,14 +78,15 @@ export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLe
 export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeNodeProps) => {
 
     
-
     if (props.tree instanceof TreeLeaf) {
       return <div className="w-full pl-2">
         <TreeLeafViewComponent item={props.tree} key={props.tree.id} />
       </div>
     }
+    
 
     const [tree] = useState<TreeNode>(() => (props.tree as TreeNode));
+
     const mirakiGlobalState = useMirakiGlobalState();
     
     const isCollapsible = tree.collapsibleState !== undefined;
@@ -177,7 +179,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
         <CollapsibleContent className="pl-1">
           {tree.children.map((child) => {
             return <div className="w-full" key={child.id}>
-              <TreeNodeComponent  tree={child} />
+              <TreeNodeComponent  tree={child as any} />
             </div>
           })}
         </CollapsibleContent>

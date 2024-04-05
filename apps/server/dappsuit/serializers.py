@@ -42,7 +42,7 @@ class SolanaProgramIDLSerializer(serializers.ModelSerializer):
         search_text_strs += self.get_search_string_from_object_array(validated_data.get('constants', []), 'name')
         return " ".join(search_text_strs)
     
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         validated_data['docs_search_text'] = self.generate_docs_search_text(validated_data)
         validated_data['program_search_text'] = self.generate_program_search_text(validated_data)
         return super().create(validated_data)

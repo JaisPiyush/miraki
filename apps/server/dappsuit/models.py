@@ -1,9 +1,11 @@
 from django.db import models
 from space import models as space_models
 from django.contrib.postgres.fields import ArrayField
+import uuid
 
 
 class SolanaProgramIDL(models.Model):
+    id = models.CharField(primary_key=True, max_length=255, default=uuid.uuid4, editable=False)
     space = models.ForeignKey(
         space_models.Space,
         on_delete=models.CASCADE,
@@ -12,7 +14,7 @@ class SolanaProgramIDL(models.Model):
     name = models.CharField(max_length=255)
     version = models.CharField(max_length=40, null=True, blank=True)
     docs = ArrayField(
-        models.TextField(),
+        models.TextField(blank=True),
         null=True,
         blank=True,
         default=list

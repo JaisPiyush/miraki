@@ -1,3 +1,4 @@
+import React from "react";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace miraki {
@@ -17,7 +18,7 @@ export namespace miraki {
             group?: 'inline'
             command: Command;
             title: string;
-            icon?: string;
+            icon?: string | React.ReactNode;
             id: string;
         }
         
@@ -37,7 +38,6 @@ export namespace miraki {
             collapsibleState?: TreeLeafCollapsibleState;
             addChild(child: TreeLeaf | TreeNode): void;
             removeChild(child: TreeLeaf | TreeNode): void;
-            setChild(index: number, child: TreeLeaf | TreeNode): void;
             // dragChild(from: number, to: number): void;
             action?: {
                 title?: TreeNodeAction[],

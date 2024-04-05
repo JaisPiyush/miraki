@@ -3,8 +3,6 @@ import { miraki_dappsuit } from "@/miraki_dappsuit";
 import { BaseProgramBuilder } from "./base_program_builder";
 import { FC } from "react";
 import { Program } from "@project-serum/anchor";
-import { InputProps } from "../ui/input";
-import { SwitchProps } from "@radix-ui/react-switch";
 import { InstructionTypeBuilder } from "./idl_instruction_builder";
 import { v4 as uuidv4 } from 'uuid';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
@@ -12,17 +10,19 @@ import { IdlTypeBuilder } from "./idl_type_builder";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { Button } from "../ui/button";
-import { ChevronDownIcon, TrashIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 
 
 
 interface IdlProgramTypeBuilderProps {
-    program?: Program
+    program?: Program;
+    onUpdateClick?: (id: string) => void;
+    onDeleteClick?: (id: string) => void;
 }
 
 function Events(props: {events: miraki_dappsuit.solana.IdlEvent[]}) {
-    return <div className="w-full max-w-screen-lg mt-2 bg-zinc-50 px-4 border pb-4 rounded-md">
+    return <div className="w-full max-w-screen-lg mt-2 bg-secondary px-4 border pb-4 rounded-md">
         <Collapsible className="w-full">
             <div className="w-full py-2 flex justify-between items-center">
                 <p className="text-lg font-semibold">Events</p>
@@ -73,12 +73,12 @@ function Events(props: {events: miraki_dappsuit.solana.IdlEvent[]}) {
 }
 
 function ErrorTable(props: {errors: miraki_dappsuit.solana.IdlErrorCode[]}) {
-    return <div className="w-full max-w-screen-lg mt-2 bg-zinc-50 px-4 border pb-4 rounded-md">
+    return <div className="w-full max-w-screen-lg mt-2 bg-secondary px-4 border pb-4 rounded-md">
                 <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="errors">
                         <AccordionTrigger><p className="text-lg font-semibold">Errors</p></AccordionTrigger>
-                        <AccordionContent>
-                                <Table className="border rounded-md">
+                        <AccordionContent className="px-2">
+                                <Table className="border dark:border-background rounded-md dark:bg-background">
                                 <TableHeader className="border border-t-0 border-l-0 border-r-0 bg-secondary">
                                     <TableHead>Name</TableHead>
                                     <TableHead>Code</TableHead>
@@ -105,12 +105,12 @@ function ErrorTable(props: {errors: miraki_dappsuit.solana.IdlErrorCode[]}) {
 export class IdlProgramTypeBuilder extends
     BaseProgramBuilder< 
         miraki_dappsuit.solana.Idl,
-        InputProps | SwitchProps | IdlProgramTypeBuilderProps
+        IdlProgramTypeBuilderProps
         > {
     
     instructions: InstructionTypeBuilder[] = [];        
 
-    toComponent(context: miraki_dappsuit.BuildContext<InputProps | SwitchProps | IdlProgramTypeBuilderProps, undefined>): FC {
+    toComponent(context: miraki_dappsuit.BuildContext<IdlProgramTypeBuilderProps, undefined>): FC {
         
         this.instructions = this.idl.instructions.map(inst => new InstructionTypeBuilder(inst));
         
@@ -122,30 +122,39 @@ export class IdlProgramTypeBuilder extends
             return [constant.name, rep , constant.value]
         })
 
+
+
         return () => {
+
+            // const handleOnDeleteClick = () => {
+            //     if (context.props?.onDeleteClick && (this.idl as SolanaProgramIdl).id) {
+            //         context.props?.onDeleteClick((this.idl as SolanaProgramIdl).id as string);
+            //     }
+            // }
+
             return <div className="w-full h-full flex flex-col">
                 <div className="w-full flex justify-center border border-t-0 border-r-0 border-l-0">
                     <div className="w-full py-4 px-4 max-w-screen-lg flex justify-between items-center">
                         <p className="font-semibold text-lg">{this.idl.name} (version {this.idl.version})</p>
                         <div className="flex">
-                            <Button variant="outline" className="mr-2">Update IDL</Button>
-                            <Button variant="outline"><TrashIcon className="w-4 h-4" /></Button>
+                            {/* <Button variant="outline" className="mr-2">Update IDL</Button> */}
+                            {/* <Button variant="outline" onClick={() => {handleOnDeleteClick()}}><TrashIcon className="w-4 h-4" /></Button> */}
                         </div>
                     </div>
                 </div>
                 <div className="w-full flex flex-col py-4 px-4 pb-10 items-center">
-                    <div className="w-full p-4 border border-blue-500 rounded-lg bg-blue-100 max-w-screen-lg">
+                    <div className="w-full p-4 border border-blue-500 dark:border-blue-600 rounded-lg bg-blue-100 dark:bg-blue-500 max-w-screen-lg">
                         {
                             (this.idl.docs || [])
-                            .map(doc => <p className="text-md font-normal" key={uuidv4()}>{doc}</p>)
+                            .map(doc => <p className="text-md font-normal " key={uuidv4()}>{doc}</p>)
                         }
                     </div>
-                    <div className="w-full max-w-screen-lg mt-2 bg-zinc-50 px-4 border pb-4 rounded-md">
+                    <div className="w-full max-w-screen-lg mt-2 bg-secondary px-4 border pb-4 rounded-md">
                         <Accordion type="single" collapsible className="w-full">
                             <AccordionItem value='constants'>
                             <AccordionTrigger><p className="text-lg font-semibold">Constants</p></AccordionTrigger>
-                                <AccordionContent>
-                                    <Table className="border rounded-md">
+                                <AccordionContent className="px-2">
+                                    <Table className="border dark:border-background rounded-md dark:bg-background">
                                         <TableHeader className="border border-t-0 border-l-0 border-r-0 bg-secondary">
                                             <TableHead>Name</TableHead>
                                             <TableHead>Type</TableHead>
@@ -169,7 +178,7 @@ export class IdlProgramTypeBuilder extends
                     </div>
                     <Events events={this.idl.events || []} />
                     <ErrorTable errors={this.idl.errors || []} />
-                    <div className="w-full max-w-screen-lg mt-4 rounded-md bg-zinc-50 px-4 pb-4 border">
+                    <div className="w-full max-w-screen-lg mt-4 rounded-md bg-secondary px-4 pb-4 border">
                         <div className="w-full py-2">
                             <p className="text-lg font-semibold">Instructions</p>
                         </div>

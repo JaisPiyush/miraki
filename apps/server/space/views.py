@@ -128,6 +128,10 @@ class SpaceAppTreeNodeListView(views.APIView):
                 print(node_id, node_mapper[parent_node]["children"])
             else:
                 node_mapper[parent_node] = {"children": []}
-        # print(root_nodes)
-        return Response([node_mapper[node_id] for node_id in root_nodes])
+        nodes = []
+        for node_id in root_nodes:
+            if len(node_mapper[node_id]["children"]) == 0:
+                node_mapper[node_id]["children"] = None
+            nodes.append(node_mapper[node_id])
+        return Response(nodes)
         

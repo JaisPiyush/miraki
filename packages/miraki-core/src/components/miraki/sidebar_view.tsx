@@ -12,7 +12,6 @@ export const MirakiSidebarView: React.FC = () => {
     useEffect(() => {
         const eventListener = (event: ComponentUpdatedEvent) => {
             if (event.position === "sidebar") {
-
                 forceUpdate();
             }
         };
@@ -26,7 +25,6 @@ export const MirakiSidebarView: React.FC = () => {
     const nodes = pluginStore.executeFunction(
         'MirakiSidebarView.getNodes',
     );
-    // console.log(nodes)
 
     return (
         <ScrollArea className="h-full w-full bg-background border border-t-0 border-b-0 border-l-0">

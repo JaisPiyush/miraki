@@ -42,13 +42,13 @@ export class InstructionTypeBuilder extends
         
         
         return () => {
-            return <AccordionItem value={this.idl.name} className="border rounded-md px-4 bg-secondary max-w-screen-lg my-1">
+            return <AccordionItem value={this.idl.name} className="border dark:border-background rounded-md px-4 bg-secondary dark:bg-background max-w-screen-lg my-1">
                 <AccordionTrigger>
                     <p>{this.idl.name} {returnRepr}</p>
                 </AccordionTrigger>
                 <AccordionContent>
                     <div className="w-full flex flex-col">
-                        <div className="w-full px-4 py-2 border border-green-400 rounded-md my-2 bg-green-100">
+                        <div className="w-full px-4 py-2 border border-green-400 dark:border-green-600 rounded-md my-2 bg-green-100 dark:bg-green-500">
                             {(this.idl.docs || []).map(c => <p key={uuidv4()} className="text-sm">{c}</p>)}
                             {/* <p className="text-sm">{(this.idl.docs || [])}</p> */}
                         </div>

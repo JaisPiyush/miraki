@@ -28,8 +28,10 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     addToNodes(
         node: TreeNodeOptions
     ) {
-        this.nodes.set(node.id, new TreeNode(node))
+        const _node = new TreeNode(node)
+        this.nodes.set(node.id, _node)
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
+        return _node;
     }
 
     removeFromNodes(

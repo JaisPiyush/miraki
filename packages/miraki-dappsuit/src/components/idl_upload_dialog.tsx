@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { useFilePicker } from 'use-file-picker';
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
@@ -41,7 +41,7 @@ export default function IdlUploadDialog(props: IdlUploadDialogProps) {
     // TODO: Finish plugin
 
     return <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger><Button variant="outline">Edit Profile</Button></DialogTrigger>
+            {/* <DialogTrigger><Button variant="outline">Edit Profile</Button></DialogTrigger> */}
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Upload Idl</DialogTitle>

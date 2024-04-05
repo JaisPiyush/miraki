@@ -52,7 +52,7 @@ class Space(models.Model):
         self.members_count += 1
 
 class SpaceAppTreeNode(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(primary_key=True, max_length=255, default=uuid.uuid4, editable=False)
     app_id = models.CharField(max_length=255)
     space = models.ForeignKey(
         Space,

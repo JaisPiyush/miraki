@@ -9,7 +9,8 @@ import { MirakiPeripheralsComponent } from "../src/components/miraki/miraki_peri
 import { MirakiPeripheralsPlugin } from "../src/plugins/miraki_peripherals_plugin";
 import { MirakiViewPlugin } from "../src/plugins/miraki_view_plugin";
 import { MirakiView } from "../src/components/miraki/miraki_view";
-import { TreeNode, TreeLeaf } from '@/lib/miraki_tree_view';
+import { TreeNode, TreeLeaf, TreeNodeAction } from '@/lib/miraki_tree_view';
+import ComponentUpdatedEvent from '@/events/ComponentUpdatedEvent'
 
 
 import { IPlugin } from "react-pluggable";
@@ -27,7 +28,9 @@ export {
     MirakiViewPlugin,
     miraki,
     TreeLeaf,
-    TreeNode
+    TreeNode,
+    TreeNodeAction,
+    ComponentUpdatedEvent
 }
 
 
