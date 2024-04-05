@@ -1,0 +1,44 @@
+.progress-bar {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border-top-width: 4px;
+  border-right-width: 4px;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--primary-foreground);
+  animation-name: progress;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 600ms;
+  
+}
+
+  
+  @keyframes progress {
+    0% {
+      border-top-width: 6px;
+      border-right-width: 0px;
+      border-bottom-width: 0px;
+      border-left-width: 0px;
+    }
+    25% {
+      border-top-width: 0px;
+      border-right-width: 6px;
+      border-bottom-width: 0px;
+      border-left-width: 0px;
+    }
+    50% {
+      border-top-width: 0px;
+      border-right-width: 0px;
+      border-bottom-width: 6px;
+      border-left-width: 0px;
+    }
+  
+    100% {
+      border-top-width: 0px;
+      border-right-width: 0px;
+      border-bottom-width: 0px;
+      border-left-width: 6px;
+    }
+  }

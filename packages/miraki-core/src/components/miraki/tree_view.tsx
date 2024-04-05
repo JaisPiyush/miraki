@@ -5,17 +5,18 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "../../components/ui/collapsible"
 import { Button } from "../ui/button";
-import { miraki } from "@/miraki";
+import { miraki } from "../../miraki";
 
 import { observer } from "mobx-react-lite"
-import { getGroupActions, TreeLeaf, TreeNode, TreeNodeAction  } from "@/lib/miraki_tree_view";
-import {  useMirakiGlobalState } from "@/context/global_state_context";
+import { getGroupActions, TreeLeaf, TreeNode, TreeNodeAction  } from "../../lib/miraki_tree_view";
+import {  useMirakiGlobalState } from "../../context/global_state_context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { ToolTipTextBox } from "./tooltip_box";
 import { TreeNodeInlineActionComponent } from "./tree_item_action";
+import { usePluginStore } from "react-pluggable";
 
 interface TreeNodeProps {
     key?: string;
@@ -31,18 +32,25 @@ interface TreeLeafViewProps {
 
 
 const getClassNamesBasedOnInteraction = (isActive: boolean) => {
-  return `${isActive ? "bg-gray-200" : ""} hover:bg-gray-300 cursor-pointer`;
+  return `${isActive ? "bg-zinc-100 dark:bg-zinc-400" : ""} hover:bg-zinc-100 dark:hover:bg-zinc-500 cursor-pointer`;
 
 }
 
 export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLeafViewProps) => {
   const mirakiGlobalState = useMirakiGlobalState();
+  const pluginStore = usePluginStore();
   
+  const handleClick = () => {
+    console.log('on leaf click', props.item)
+    if (props.item.command && props.item.command.command) {
+      pluginStore.executeFunction(props.item.command.command, props.item);
+    }
+  }
 
   return <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className={cn(
+        <div onClick={() => {handleClick()}} className={cn(
           "pl-3 pr-4 py-3 font-mono text-sm shadow-sm flex items-center justify-between",
           getClassNamesBasedOnInteraction(mirakiGlobalState.activeTreeLeafId === props.item.id)
         )}>
@@ -70,14 +78,15 @@ export const TreeLeafViewComponent: React.FC<TreeLeafViewProps> = (props: TreeLe
 export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeNodeProps) => {
 
     
-
     if (props.tree instanceof TreeLeaf) {
       return <div className="w-full pl-2">
         <TreeLeafViewComponent item={props.tree} key={props.tree.id} />
       </div>
     }
+    
 
     const [tree] = useState<TreeNode>(() => (props.tree as TreeNode));
+
     const mirakiGlobalState = useMirakiGlobalState();
     
     const isCollapsible = tree.collapsibleState !== undefined;
@@ -97,6 +106,12 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
     const getInlineTitleActions = () => {
       return getGroupActions(getTitleActions(), "inline");
     }
+
+    const getNonInlineTitleActions = () => {
+      return getGroupActions(getTitleActions())
+    }
+
+    const nonInlineTitleActionsLength = getNonInlineTitleActions().length;
 
     return (
       <Collapsible
@@ -127,14 +142,18 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center justify-between w-full">
-                  <h4 className="text-xs font-normal truncate">
+                  <h4 className="text-xs font-normal truncate ml-1">
                     {props.tree.name}
                   </h4>
 
                   <div className="flex flex-row-reverse items-center">
-                    <Button variant="ghost" size="sm">
-                      <DotsVerticalIcon className="h-3 w-3" />
-                    </Button>
+                    {
+                      nonInlineTitleActionsLength > 0
+                      ? <Button variant="ghost" size="sm">
+                          <DotsVerticalIcon className="h-3 w-3" />
+                        </Button>
+                      : <></>
+                    }
                     {
                       getInlineTitleActions().map((action) => {
                         return <TreeNodeInlineActionComponent key={action.id} actionNode={action} />
@@ -160,7 +179,7 @@ export const TreeNodeComponent: React.FC<TreeNodeProps> = observer((props: TreeN
         <CollapsibleContent className="pl-1">
           {tree.children.map((child) => {
             return <div className="w-full" key={child.id}>
-              <TreeNodeComponent  tree={child} />
+              <TreeNodeComponent  tree={child as any} />
             </div>
           })}
         </CollapsibleContent>

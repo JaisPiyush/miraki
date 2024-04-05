@@ -1,14 +1,16 @@
 import { createContext, useContext } from "react";
-import { action, makeAutoObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import {Axios} from 'axios'
 
 export class MirakiGlobalState {
     activeTreeLeafId?: string;
+    api?: Axios;
+    spaceId?: number;
 
-    constructor() {
-        makeAutoObservable(this, {
-            activeTreeLeafId: observable,
-            setActiveTreeLeafId: action,
-        });
+    constructor(data?: {api?: Axios, spaceId?: number}) {
+        makeAutoObservable(this);
+        this.api = data?.api;
+        this.spaceId = data?.spaceId;
     }
 
     setActiveTreeLeafId(id?: string) {

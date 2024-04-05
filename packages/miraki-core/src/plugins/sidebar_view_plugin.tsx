@@ -1,16 +1,16 @@
 import { IPlugin } from "react-pluggable";
 import { PluginStore } from "react-pluggable";
-import { MirakiSidebarView } from "@/components/miraki/sidebar_view";
-import ComponentUpdatedEvent from "@/events/ComponentUpdatedEvent";
-import { miraki } from "@/miraki";
-import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "@/lib/miraki_tree_view";
+import { MirakiSidebarView } from "../components/miraki/sidebar_view";
+import ComponentUpdatedEvent from "../events/ComponentUpdatedEvent";
+import { miraki } from "../miraki";
+import { BaseTreeNode, TreeLeaf, TreeNode, TreeNodeAction, TreeNodeOptions } from "../lib/miraki_tree_view";
 
 
 export class MirakiSidebarViewPlugin implements IPlugin {
 
     name = "MirakiSidebarViewPlugin@1.0.0";
     public pluginStore: PluginStore  = new PluginStore();
-    private nodes: miraki.TreeNode.TreeNode[] = [];
+    private nodes = new Map<string, miraki.TreeNode.TreeNode>();
 
 
     getPluginName() {
@@ -28,14 +28,16 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     addToNodes(
         node: TreeNodeOptions
     ) {
-        this.nodes.push(new TreeNode(node));
+        const _node = new TreeNode(node)
+        this.nodes.set(node.id, _node)
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
+        return _node;
     }
 
     removeFromNodes(
         node: miraki.TreeNode.TreeNode
     ) {
-        this.nodes = this.nodes.filter((n) => n !== node);
+        this.nodes.delete(node.id)
         this.pluginStore.dispatchEvent(new ComponentUpdatedEvent('MirakiSidebarView.componentUpdated', "sidebar"));
     }
 
@@ -74,11 +76,10 @@ export class MirakiSidebarViewPlugin implements IPlugin {
 
     activate(): void {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
 
         this.pluginStore.addFunction(
             'MirakiSidebarView.getNodes', () => {
-            return self.nodes;
+                return Array.from(this.nodes.values());
         });
 
         this.pluginStore.addFunction(
@@ -106,9 +107,9 @@ export class MirakiSidebarViewPlugin implements IPlugin {
     deactivate(): void {
         this.pluginStore.removeFunction('MirakiSidebarView.getNodes');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.add');
+        this.pluginStore.removeFunction('MirakiSidebarView.add');
 
-        // this.pluginStore.removeFunction('MirakiSidebarView.remove');
+        this.pluginStore.removeFunction('MirakiSidebarView.remove');
 
         this.pluginStore.removeFunction('MirakiSidebarView.getComponent');
 
