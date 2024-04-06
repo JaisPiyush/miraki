@@ -4,15 +4,20 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area"
-import SearchResultSection from "./search_result_section";
+import { AppRepository } from "@/lib/app_repository";
+import SearchRenderer from "./search_renderer";
+import { usePluginStore } from "react-pluggable";
 
 
 
-export default function SearchDialogContent() {
+export default function SearchDialogContent(props: {app: AppRepository}) {
     const [searchText, setSearchText] = useState('')
+    const pluginStore = usePluginStore();
 
     const handleOnSearchClick = () => {
-
+        if (searchText && searchText.length > 0) {
+            pluginStore.executeFunction('MirakiSearchPlugin.search', searchText);
+        }
     }
 
     return <DialogContent className="w-full max-w-screen-md">
@@ -30,7 +35,7 @@ export default function SearchDialogContent() {
                     </div> 
                 </DialogHeader>
                 <ScrollArea className="w-full h-[500px] mt-4 flex flex-col space-y-2">
-                    <SearchResultSection resultNavigationTrace={['Personal workspace 1', 'Snapshot', 'Proposals']}></SearchResultSection>
+                    <SearchRenderer app={props.app} />
                 </ScrollArea>
             </DialogContent>
 }

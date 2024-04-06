@@ -17,7 +17,6 @@ import { observer } from "mobx-react-lite";
 import { api } from "@/lib/api/base";
 import SearchFloatingButton from "@/components/search_floating_button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import SearchDialog from "@/components/search_dialog_content";
 import SearchDialogContent from "@/components/search_dialog_content";
 
 const appRepository = new AppRepository();
@@ -55,7 +54,7 @@ function _HomeView() {
                                     <DialogTrigger >
                                         <SearchFloatingButton />
                                     </DialogTrigger>
-                                    <SearchDialogContent />
+                                    <SearchDialogContent app={appRepository} />
                                 </Dialog>
                             
                             <MirakiPeripheralsComponent />

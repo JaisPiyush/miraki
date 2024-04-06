@@ -38,12 +38,17 @@
     "react-dom": "^18.2.0",
     "react-pluggable": "^0.4.3",
     "react-router-dom": "^6.22.3",
+    "react-spinners": "^0.13.8",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "web3-react-phantom": "^1.0.4"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@prisma/client": "^5.11.0",
+    "@rollup/plugin-inject": "^5.0.5",
     "@types/axios": "^0.14.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -55,14 +60,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "postcss": "^8.4.38",
+    "rollup-plugin-polyfill-node": "^0.13.0",
     "tailwindcss": "^3.4.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0",
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
-    "@prisma/client": "^5.11.0",
-    "@rollup/plugin-inject": "^5.0.5",
-    "rollup-plugin-polyfill-node": "^0.13.0"
+    "vite": "^5.2.0"
   }
 }
