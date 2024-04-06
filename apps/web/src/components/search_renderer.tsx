@@ -3,9 +3,9 @@ import { ProfileSpaceStateContext } from "@/states/profile_space.state";
 import { ComponentUpdatedEvent, useForceUpdate } from "@miraki/miraki-core";
 import React, { useEffect, useContext } from "react";
 import { usePluginStore } from "react-pluggable";
-import {v4 as uuidv4} from 'uuid';
 import SearchResultSection from "./search_result_section";
 import {CircleLoader} from 'react-spinners'
+import { ScrollArea } from "./ui/scroll-area";
 
 interface SearchRendererProps {
     app: AppRepository;
@@ -20,7 +20,7 @@ export default function SearchRenderer(props: SearchRendererProps) {
 
     useEffect(() => {
         const eventListener = (event: ComponentUpdatedEvent) => {
-            if (event.position === "sidebar") {
+            if (event.position === "search") {
                 forceUpdate();
             }
         };
@@ -32,7 +32,7 @@ export default function SearchRenderer(props: SearchRendererProps) {
     }, [pluginStore, forceUpdate]);
 
     const searchResults = pluginStore
-            .executeFunction('MirakiSearchPlugin.getSearchResults') as Map<string, React.FC[]>
+            .executeFunction('MirakiSearchPlugin.getSearchResults') as Map<string, React.ReactNode[]>
     
     const results = Array.from(searchResults.entries())
                     .map(([appId, components]) => {
@@ -43,17 +43,19 @@ export default function SearchRenderer(props: SearchRendererProps) {
                             resultNavigationTrace={navigationTrace}
                             >
                                 {
-                                    components.map((Component) => <Component key={uuidv4()} />)
+                                    components
                                 }
                             </SearchResultSection>
 
                     })
-    return <>
+    return <ScrollArea className="w-full h-full mt-4 px-6 flex flex-col space-y-2">
+                   
             {
                 results.length === 0
                 ? <CircleLoader />
                 : results
             }
-        </>
+            </ScrollArea>
+        
 }
 

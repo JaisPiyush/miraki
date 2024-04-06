@@ -16,9 +16,7 @@ import { AppRepository } from "@/lib/app_repository";
 import { observer } from "mobx-react-lite";
 import { api } from "@/lib/api/base";
 import SearchFloatingButton from "@/components/search_floating_button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import SearchDialogContent from "@/components/search_dialog_content";
-
+import SearchView from "@/components/search_view";
 const appRepository = new AppRepository();
 
 
@@ -35,8 +33,15 @@ function _HomeView() {
 
     appRepository.installSystemApps(pluginStore)
     appRepository.installAppsInPlugin(pluginStore, profileSpaceState.selectedSpace?.settings?.apps || []);
-    console.log('Homer', pluginStore,profileSpaceState.selectedSpace?.settings?.apps)
-    
+
+    const handleOnSearchIconClick = () => {
+        pluginStore.executeFunction(
+            'MirakiVew.set',
+            () => {
+                return <SearchView app={appRepository} />
+            }
+        )
+    }
 
     return (<div className="w-full h-full">
                 <NavigationHeader />
@@ -50,12 +55,7 @@ function _HomeView() {
                                 <div className="h-full w-[80%] bg-background">
                                     <MirakiView />
                                 </div>
-                                <Dialog>
-                                    <DialogTrigger >
-                                        <SearchFloatingButton />
-                                    </DialogTrigger>
-                                    <SearchDialogContent app={appRepository} />
-                                </Dialog>
+                                <SearchFloatingButton onClick={handleOnSearchIconClick} />
                             
                             <MirakiPeripheralsComponent />
                         </MirakiGlobalStateContext.Provider>

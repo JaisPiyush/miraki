@@ -6,7 +6,7 @@ import {ComponentUpdatedEvent} from "@miraki/miraki-core"
 export default class MirakiSearchPlugin implements IPlugin {
 
     pluginStore: PluginStore;
-    private componentsMap = new Map<string, React.FC[]>()
+    private componentsMap = new Map<string, React.ReactNode[]>()
     private pluginSearchAdapters = new Map<string, (searchText: string) => void>()
     private currentSearchText?: string;
 
@@ -24,7 +24,7 @@ export default class MirakiSearchPlugin implements IPlugin {
         this.pluginSearchAdapters.delete(pluginId);
     }
 
-    addPluginSearchResults(pluginId: string, searchText: string, components: React.FC[]) {
+    addPluginSearchResults(pluginId: string, searchText: string, components: React.ReactNode[]) {
         if (searchText === this.currentSearchText) {
             this.componentsMap.set(pluginId, components);
             this.pluginStore.dispatchEvent(new ComponentUpdatedEvent("MirakiSearchPlugin.componentUpdate", "search"))
