@@ -8,7 +8,6 @@ import { node } from './plugin';
 import { TreeNodeAction } from '@miraki/miraki-core';
 import { Proposal } from './types';
 import { search } from './lib/api';
-import { Card, CardHeader, CardTitle } from './components/ui/card';
 import { Separator } from './components/ui/separator';
 
 
@@ -32,9 +31,9 @@ export default class MirakiSnapshotPlugin implements IPlugin {
 
     sendSearchResults(searchText: string, proposals: Proposal[]) {
         const components = proposals.map((proposal, index) => 
-                            <div>
+                            <div key={proposal.id} >
                                 <div onClick={() => {this.pluginStore.executeFunction('MirakiSnapshotPlugin.launchProposalView')}} 
-                                    key={proposal.id} 
+                                    
                                     className='w-full p-4 text-sm cursor-pointer hover:bg-secondary'
                                 >
                                     <span className='text-muted-foreground'>Proposal: </span>{proposal.title}
@@ -109,6 +108,7 @@ export default class MirakiSnapshotPlugin implements IPlugin {
         )
         this.pluginStore.executeFunction(
             'MirakiSearchPlugin.removeSearchAdapter',
+            this.getPluginName()
         )
 
         

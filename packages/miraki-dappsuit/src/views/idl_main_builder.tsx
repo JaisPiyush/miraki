@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import {CircleLoader} from 'react-spinners'
 
 interface IdlMainBuilderProps {
-    programId: number;
+    programId: string;
     appId: string;
 }
 

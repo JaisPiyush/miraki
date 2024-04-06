@@ -25,7 +25,8 @@ export default class MirakiSearchPlugin implements IPlugin {
     }
 
     addPluginSearchResults(pluginId: string, searchText: string, components: React.ReactNode[]) {
-        if (searchText === this.currentSearchText) {
+        // console.log(pluginId, searchText, components)
+        if (searchText === this.currentSearchText && components.length > 0) {
             this.componentsMap.set(pluginId, components);
             this.pluginStore.dispatchEvent(new ComponentUpdatedEvent("MirakiSearchPlugin.componentUpdate", "search"))
         }
