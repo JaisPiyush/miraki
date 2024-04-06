@@ -9,6 +9,8 @@ import { ProfileSpaceStateContext } from "@/states/profile_space.state";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import CreateSpaceDialogContent from "@/components/create_space_dialog_content";
 
 function _SpaceView() {
     
@@ -17,8 +19,9 @@ function _SpaceView() {
     const {toast} = useToast()
     const [showLoading, setShowLoading] = useState(false);
     const [spaces, setSpaces] = useState<Space[]>([])
+    const [showDialog, setShowDialog] = useState(false)
 
-    useEffect(() => {
+    const loadSpaces = async () => {
         setShowLoading(true)
         fetchAllSpaces()
         .then((spaces) => {
@@ -31,18 +34,31 @@ function _SpaceView() {
             });
             setShowLoading(false)
         })
+    }
+
+    useEffect(() => {
+        loadSpaces().then();
     }, [])
 
     const joinedSpaces = (profileSpaceState.profileSpaces || []).map(space => space.id)
 
-    //TODO: Add create space dialog
+    const handleOnCreateSpace = () => {
+        setShowDialog(false);
+        loadSpaces().then()
+    }
+    
 
     return (
         <div className="w-full h-full">
             <NavigationHeader />
             <div className="w-full h-[90%] bg-background flex flex-col items-center pt-4 space-y-4">
                 <div className="w-[45%] py-2 flex justify-center">
-                    <Button><PlusIcon className="w-4 h-4 mr-2" /> Space</Button>
+                    <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                        <DialogTrigger>
+                            <Button><PlusIcon className="w-4 h-4 mr-2" /> Space</Button>
+                        </DialogTrigger>
+                        <CreateSpaceDialogContent close={() => {setShowDialog(false)}} onCreate={handleOnCreateSpace} />
+                    </Dialog>
                 </div>
                 <div className="w-[45%] h-auto grid grid-cols-4 gap-4 pt-10">
                     {
