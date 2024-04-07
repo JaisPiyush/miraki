@@ -2,18 +2,19 @@
 import {IPlugin, miraki, TreeNode, TreeNodeAction} from '@miraki/miraki-core'
 import { PluginStore } from 'react-pluggable';
 import IdlMainBuilder from './views/idl_main_builder';
-import { createSolanaIdlProgram, fetchSidebarNodes } from './lib/api';
+import { createSolanaIdlProgram, fetchSidebarNodes, searchSolanaProgramIdl, SolanaProgramIdl } from './lib/api';
 import IdlUploadDialog from './components/idl_upload_dialog';
 import { PlusIcon } from '@radix-ui/react-icons';
 
 
 import {Axios} from 'axios'
+import { Separator } from './components/ui/separator';
 
 declare global {
   interface Window {
     miraki?: {
-      api: Axios,
-      spaceId: number
+      api?: Axios,
+      spaceId?: number
     }
 
   }
@@ -76,6 +77,31 @@ export default class MirakiDappSuitPlugin implements IPlugin {
         }
     }
 
+    sendSearchResults(searchText: string, programs: SolanaProgramIdl[]) {
+        const components = programs.map((program, index) => 
+                            <div key={program.id} >
+                                <div onClick={() => {
+                                    this.pluginStore.executeFunction(
+                                        'MirakiVew.set', 
+                                        () => <IdlMainBuilder appId={this.getPluginName()} programId={program.id as string} />
+                                    )
+                                }} 
+                                    
+                                    className='w-full p-4 text-sm cursor-pointer hover:bg-secondary'
+                                >
+                                    <span className='text-muted-foreground'>Program: </span>{program.name}
+                                </div>
+                                {index === programs.length - 1 ? <></>: <Separator />}
+                            </div>
+                        )
+        this.pluginStore.executeFunction(
+            'MirakiSearchPlugin.addSearchResults',
+            this.getPluginName(),
+            searchText,
+            components
+        )
+    }
+
 
     onFileSelected(node: TreeNode) {
         return async (content: string) => {
@@ -111,7 +137,7 @@ export default class MirakiDappSuitPlugin implements IPlugin {
                         console.log(node, node.command, node.command)
                         if (node.command && node.command.kwargs && node.command.kwargs.programId) {
                             return <IdlMainBuilder 
-                                programId={node.command.kwargs.programId as number}
+                                programId={node.command.kwargs.programId as string}
                                 appId={appId}
                                 />
                         }
@@ -140,6 +166,18 @@ export default class MirakiDappSuitPlugin implements IPlugin {
                     )
                 }
             )
+
+            this.pluginStore.executeFunction(
+                'MirakiSearchPlugin.addSearchAdapter',
+                this.getPluginName(),
+                (searchText: string) => {
+                    const miraki = window.miraki!;
+                    searchSolanaProgramIdl(miraki.api, miraki.spaceId, searchText)
+                    .then((programs: SolanaProgramIdl[]) => {
+                        this.sendSearchResults(searchText, programs)
+                    })
+                }
+            )
         }
 
         
@@ -152,6 +190,10 @@ export default class MirakiDappSuitPlugin implements IPlugin {
             node
         )
         this.pluginStore.removeFunction('MirakiDappSuitPlugin.addNewProgram')
+        this.pluginStore.executeFunction(
+            'MirakiSearchPlugin.removeSearchAdapter',
+            this.getPluginName()
+        )
         
     }
 

@@ -9,6 +9,7 @@ import {
 import MirakiSnapshotPlugin from "@miraki/miraki-snapshot";
 import MirakiBoardPlugin from "@miraki/miraki-trello";
 import MirakiDappSuitPlugin from "@miraki/miraki-dappsuit";
+import MirakiSearchPlugin from "./search_plugin";
 
 export interface AppDetails {
     avatar?: string;
@@ -67,6 +68,7 @@ export class AppRepository {
         const mirakiPeripheralsPlugin = new MirakiPeripheralsPlugin()
         const sidebarViewPlugin = new MirakiSidebarViewPlugin()
         const mirakiViewPlugin = new MirakiViewPlugin()
+        const mirakiSearchPlugin = new MirakiSearchPlugin()
         
 
         this.systemAppsRecord = {
@@ -84,6 +86,11 @@ export class AppRepository {
                 id: this.getPluginName(mirakiViewPlugin),
                 name: mirakiViewPlugin.getPluginName(),
                 app: mirakiViewPlugin
+            },
+            [this.getPluginName(mirakiSearchPlugin)]: {
+                id: this.getPluginName(mirakiSearchPlugin),
+                name: this.getPluginName(mirakiSearchPlugin),
+                app: mirakiSearchPlugin
             }
         }
     }
@@ -93,8 +100,12 @@ export class AppRepository {
         this.initSystemAppsRecord();
     }
 
+
+    getAppById(appId: string) {
+        return this.appsRecord.get(appId);
+    }
+
     getApps(): AppDetails[] {
-        console.log(this.appsRecord.values())
         return Array.from(this.appsRecord.values())
     }
 

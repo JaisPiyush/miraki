@@ -11,6 +11,7 @@ import { MirakiViewPlugin } from "../src/plugins/miraki_view_plugin";
 import { MirakiView } from "../src/components/miraki/miraki_view";
 import { TreeNode, TreeLeaf, TreeNodeAction } from '@/lib/miraki_tree_view';
 import ComponentUpdatedEvent from '@/events/ComponentUpdatedEvent'
+import useForceUpdate from '@/hooks/useForceUpdate';
 
 
 import { IPlugin } from "react-pluggable";
@@ -30,7 +31,8 @@ export {
     TreeLeaf,
     TreeNode,
     TreeNodeAction,
-    ComponentUpdatedEvent
+    ComponentUpdatedEvent,
+    useForceUpdate
 }
 
 

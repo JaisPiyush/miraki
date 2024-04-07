@@ -12,7 +12,7 @@ declare global {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       solana?: any
     },
-    miraki: {
+    miraki?: {
       api?: Axios,
       spaceId?: number;
     }

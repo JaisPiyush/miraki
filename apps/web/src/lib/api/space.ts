@@ -1,5 +1,5 @@
 import { api } from "./base"
-import { Space, SpaceSettings } from "./types"
+import { CreateSpace, Space, SpaceSettings } from "./types"
 
 const SELECTED_SPACE_KEY_NAME = 'space_id'
 
@@ -33,3 +33,7 @@ export const updateSpaceSettings = async (spaceId: number, settings: SpaceSettin
     return res.data;
 }
 
+export const createSpace = async (space: CreateSpace) => {
+    const res = await api.post<Space>('space/profile/', space);
+    return res.data;
+}

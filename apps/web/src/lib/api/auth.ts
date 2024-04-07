@@ -33,6 +33,8 @@ export const login = async (
         )
         if (res.status === 202) {
             window.localStorage.setItem('auth_token', res.data.token);
+            // Reload the entire site so that Axios instance can pick up the auth_token
+            location.reload();
         }
 }
 

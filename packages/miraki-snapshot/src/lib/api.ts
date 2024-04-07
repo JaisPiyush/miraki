@@ -23,3 +23,9 @@ export const createProposal = async (api: Axios, proposal: Proposal) => {
     const res = await api.post('proposal/space/', proposal);
     return res.data;
 }
+
+
+export const search = async (api: Axios, spaceId: number, searchText: string) => {
+    const res = await api.get<Proposal[]>(`proposal/space/${spaceId}/?search='${searchText}'`)
+    return res.data;
+}

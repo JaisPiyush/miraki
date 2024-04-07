@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -89,7 +90,7 @@ export default function CreateProposalView() {
     const proposal: Proposal = {
       ...values,
       member_quorum: 0.5,
-      space: window.miraki.spaceId
+      space: window.miraki?.spaceId
     }
     try {
       setShowLoader(true)

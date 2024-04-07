@@ -31,3 +31,10 @@ export interface Space {
     creator: Profile;
     settings: SpaceSettings
 }
+
+export interface CreateSpace {
+    name: string;
+    private: boolean;
+    about?: string;
+    avatar?: string;
+}

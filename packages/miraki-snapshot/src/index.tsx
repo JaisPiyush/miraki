@@ -5,6 +5,10 @@ import {IPlugin, PluginStore} from 'react-pluggable';
 import { SpaceView } from './views/spaceMain';
 import CreateProposalView from './views/create_proposal';
 import { node } from './plugin';
+import { TreeNodeAction } from '@miraki/miraki-core';
+import { Proposal } from './types';
+import { search } from './lib/api';
+import { Separator } from './components/ui/separator';
 
 
 
@@ -24,6 +28,27 @@ export default class MirakiSnapshotPlugin implements IPlugin {
         this.pluginStore = pluginStore;
     }
 
+
+    sendSearchResults(searchText: string, proposals: Proposal[]) {
+        const components = proposals.map((proposal, index) => 
+                            <div key={proposal.id} >
+                                <div onClick={() => {this.pluginStore.executeFunction('MirakiSnapshotPlugin.launchProposalView')}} 
+                                    
+                                    className='w-full p-4 text-sm cursor-pointer hover:bg-secondary'
+                                >
+                                    <span className='text-muted-foreground'>Proposal: </span>{proposal.title}
+                                </div>
+                                {index === proposals.length - 1 ? <></>: <Separator />}
+                            </div>
+                        )
+        this.pluginStore.executeFunction(
+            'MirakiSearchPlugin.addSearchResults',
+            this.getPluginName(),
+            searchText,
+            components
+        )
+    }
+
     activate(): void {
         // Create functions
         this.pluginStore.addFunction(
@@ -38,13 +63,15 @@ export default class MirakiSnapshotPlugin implements IPlugin {
             }
         );
 
+
+
         this.pluginStore.addFunction(
             'MirakiSnapshotPlugin.launchCreateProposalView',
-            (node: any) => {
+            (node: TreeNodeAction) => {
                 this.pluginStore.executeFunction(
                     'MirakiVew.set',
                     () => {
-                        console.log('node setter', node)
+                        // console.log('node setter', node)
                         return <CreateProposalView />
                     }
                 )
@@ -55,6 +82,21 @@ export default class MirakiSnapshotPlugin implements IPlugin {
             'MirakiSidebarView.add',
             node
         )
+
+        this.pluginStore.executeFunction(
+            'MirakiSearchPlugin.addSearchAdapter',
+            this.getPluginName(),
+            (searchText: string) => {
+                const miraki = window.miraki!;
+                if (! (miraki.api && miraki.spaceId)) {
+                    return;
+                }
+                search(miraki.api, miraki.spaceId, searchText)
+                .then((proposals: Proposal[]) => {
+                    this.sendSearchResults(searchText, proposals)
+                })
+            }
+        )
     }
 
     deactivate(): void {
@@ -64,6 +106,11 @@ export default class MirakiSnapshotPlugin implements IPlugin {
             'MirakiSidebarView.remove',
             node
         )
+        this.pluginStore.executeFunction(
+            'MirakiSearchPlugin.removeSearchAdapter',
+            this.getPluginName()
+        )
+
         
     }
 

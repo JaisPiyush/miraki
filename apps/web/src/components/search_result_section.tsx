@@ -6,7 +6,7 @@ interface SearchResultSectionProps {
 }
 
 export default function SearchResultSection(props: SearchResultSectionProps) {
-    return <div className="w-full p-2 py-2 border rounded-md flex flex-col space-y-2">
+    return <div className="w-full p-2 py-2 border rounded-md flex flex-col space-y-2 px-4 mb-4">
             <Breadcrumb>
                 <BreadcrumbList>
                     {props.resultNavigationTrace.map((nav, index) => {
@@ -19,7 +19,9 @@ export default function SearchResultSection(props: SearchResultSectionProps) {
                         </>
                     })}
                 </BreadcrumbList>
-                {props.children}
+                <div className="w-full my-4 border rounded-md">
+                    {props.children}
+                </div>
             </Breadcrumb>
     </div>  
 }

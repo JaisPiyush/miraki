@@ -66,6 +66,11 @@ export const getSolanaIdlProgramById = async (api: Axios, id: number) => {
     return res.data;
 }
 
+export const searchSolanaProgramIdl = async (api: Axios, spaceId: number, searchText: string) =>{
+    const res = await api.get<SolanaProgramIdl[]>(`dappsuit/spaces/${spaceId}/programs/solana/?search='${searchText}'`)
+    return res.data;
+}
+
 export const createSolanaIdlProgram = async (api: Axios, app_id: string, program: SolanaProgramIdl, parent_node?: string) => {
     try {
         // program.id = `${app_id}:solana:program:${getSha256Hash(JSON.stringify(program))}`

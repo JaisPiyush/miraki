@@ -17,7 +17,7 @@ export interface Proposal {
 
 declare global {
     interface Window {
-        miraki: {
+        miraki?: {
             api?: Axios,
             spaceId?: number
         }
